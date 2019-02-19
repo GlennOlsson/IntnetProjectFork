@@ -1,15 +1,14 @@
 CREATE TABLE Chatrooms
 (
   id INT NOT NULL,
-  Name INT NOT NULL,
+  name VARCHAR NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE Accounts
 (
   username INT NOT NULL,
-  date_created INT NOT NULL,
-  profile_pic INT NOT NULL,
+  passhash INT NOT NULL,
   PRIMARY KEY (username)
 );
 
@@ -38,4 +37,14 @@ CREATE TABLE Profile
   bio INT NOT NULL,
   user INT NOT NULL,
   FOREIGN KEY (user) REFERENCES Accounts(username)
+);
+
+CREATE TABLE ProfileComments
+(
+  comment INT NOT NULL,
+  date INT NOT NULL,
+  usernameBy INT NOT NULL,
+  usernameTo INT NOT NULL,
+  FOREIGN KEY (usernameBy) REFERENCES Accounts(username),
+  FOREIGN KEY (usernameTo) REFERENCES Accounts(username)
 );
