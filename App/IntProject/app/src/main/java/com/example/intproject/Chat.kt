@@ -16,7 +16,7 @@ class Chat : AppCompatActivity() {
             val count: String = intent.getStringExtra("count")
 
             txtName.text = name
-            txtCount.text = "Online" + count
+            txtCount.text = "Online: " + count
 
             linMessages.addView(MessageView(this, "Hejsan!"))
             linMessages.addView(MessageView(this, "Hej!"))

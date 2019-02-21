@@ -6,8 +6,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 //import kotlinx.android.synthetic.main.message_view.view.*
 
-class MessageView : LinearLayout{
+class MessageView : LinearLayout {
 
+    // Should add dynamic placing of image/message depending on who sent the message
+    // current user->msg to right, other user->msg to left
     constructor(context: Context, message: String) : super(context) {
         inflate(context, R.layout.message_view, this)
 
@@ -27,5 +29,4 @@ class MessageView : LinearLayout{
             attributes.recycle()
         }
     }
-
 }
