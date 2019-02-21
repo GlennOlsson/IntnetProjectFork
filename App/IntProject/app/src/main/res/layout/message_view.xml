@@ -10,7 +10,7 @@
             android:id="@+id/imgProfilePic"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@color/colorRed"
+            android:background="@drawable/rounded_corners_img"
             android:layout_marginLeft="20dp"
             android:layout_marginVertical="10dp"/>
     <TextView
@@ -23,6 +23,6 @@
             android:layout_marginHorizontal="20dp"
             android:text=""
             android:textColor="@color/colorWhite"
-            android:background="@color/colorLighterBg"/>
+            android:background="@drawable/rounded_corners_msg"/>
 
 </LinearLayout>
