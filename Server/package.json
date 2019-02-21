@@ -1,0 +1,11 @@
+{
+  "name": "chatup-server",
+  "version": "1.0.0",
+  "description": "A chat app server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Glenn Olsson & Oscar Ekholm",
+  "license": "MIT"
+}
