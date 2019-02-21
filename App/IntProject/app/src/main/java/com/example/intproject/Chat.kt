@@ -14,6 +14,9 @@ class Chat : AppCompatActivity() {
         try {
             val name: String = intent.getStringExtra("name")
             val count: String = intent.getStringExtra("count")
+
+            txtName.text = name
+            txtCount.text = count
         } catch (e: Exception) {
             txtName.text = "Err: " + e.toString()
         }
