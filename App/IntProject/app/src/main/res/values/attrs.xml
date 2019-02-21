@@ -4,4 +4,7 @@
         <attr name="name" format="string"/>
         <attr name="count" format="string"/>
     </declare-styleable>
+    <declare-styleable name="MessageView">
+        <attr name="message" format="string"/>
+    </declare-styleable>
 </resources>
