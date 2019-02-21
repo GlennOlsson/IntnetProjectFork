@@ -21,16 +21,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <TextView
-                    android:id="@+id/txtName"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="default1"/>
-            <TextView
-                    android:id="@+id/txtCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="default2"/>
+                    android:layout_marginVertical="10dp">
+
+                <TextView
+                        android:id="@+id/txtName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingHorizontal="20dp"
+                        android:text="Room Name"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
+                <TextView
+                        android:id="@+id/txtCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingHorizontal="20dp"
+                        android:textAlignment="viewEnd"
+                        android:text="User Count"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:orientation="horizontal"
+                    app:layout_goneMarginBottom="20dp"
+                    android:gravity="end">
+
+                <TextView
+                        android:id="@+id/txtMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:text="Hejsan allihopa!"
+                        android:textColor="@color/colorBg"
+                        android:background="@color/colorYellow"/>
+                <ImageView
+                        android:id="@+id/imgProfilePic"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@color/colorRed"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginVertical="10dp"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

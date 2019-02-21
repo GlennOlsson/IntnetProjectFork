@@ -16,7 +16,13 @@ class Chat : AppCompatActivity() {
             val count: String = intent.getStringExtra("count")
 
             txtName.text = name
-            txtCount.text = count
+            txtCount.text = "Online" + count
+
+            linMessages.addView(MessageView(this, "Hejsan!"))
+            linMessages.addView(MessageView(this, "Hej!"))
+            linMessages.addView(MessageView(this, "Hur gammal är du?"))
+            linMessages.addView(MessageView(this, "Jag är 200 år gammal"))
+            linMessages.addView(MessageView(this, "Ojdå, det var gammalt."))
         } catch (e: Exception) {
             txtName.text = "Err: " + e.toString()
         }
