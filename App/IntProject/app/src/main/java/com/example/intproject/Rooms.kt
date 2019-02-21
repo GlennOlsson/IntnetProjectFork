@@ -32,12 +32,12 @@ class Rooms : AppCompatActivity() {
 
     private fun enterRoom(v: View?) {
         try {
-            val r: RoomView = RoomView(this, "Namn", 24)
+            val r: RoomView = v as RoomView
             val name: String = r.txtRoomName.text.toString()
             val count: String = r.txtOnlineCount.text.toString()
 
             val intent = Intent(this, Chat::class.java)
-            intent.putExtra("room", name)
+            intent.putExtra("name", name)
             intent.putExtra("count", count)
             startActivity(intent)
         } catch (e: Exception) {
