@@ -76,7 +76,7 @@ const Profile = sequelize.define('profiles', {
     date_created: Sequelize.STRING
 });
 
-const Friends = sequelize.define('firends', {
+const Friends = sequelize.define('friends', {
     user1: {
         type: Sequelize.STRING,
         references: {
@@ -153,31 +153,31 @@ function sampleRest(){
     Messages.bulkCreate([
         {
             chatid: 1,
-            userid: 1,
+            userid: 'glennol',
             message: "Hejsan!",
             date: "2019-01-02;12:08",
         },
         {
             chatid: 1,
-            userid: 2,
+            userid: "oscarekh",
             message: "Hej!",
             date: "2019-01-02;12:09",
         },
         {
             chatid: 1,
-            userid: 1,
+            userid: "glennol",
             message: "Hur gammal är du?",
             date: "2019-01-02;12:10",
         },
         {
             chatid: 1,
-            userid: 2,
+            userid: "oscarekh",
             message: "Jag är 200 år gammal",
             date: "2019-01-02;12:15",
         },
         {
             chatid: 1,
-            userid: 1,
+            userid: "glennol",
             message: "Ojdå det var gammalt",
             date: "2019-01-02;12:16",
         }
@@ -185,44 +185,44 @@ function sampleRest(){
 
     Friends.bulkCreate([
         {
-            user1: 1,
-            user2: 2
+            user1: "glennol",
+            user2: "oscarekh"
         },
         {
-            user1: 2,
-            user2: 3
+            user1: "oscarekh",
+            user2: "linusri"
         },
         {
-            user1: 4,
-            user2: 1
+            user1: "frnorlin",
+            user2: "glennol"
         },
         {
-            user1: 4,
-            user2: 2
+            user1: "frnorlin",
+            user2: "oscarekh"
         }        
     ])
 
     Profile.bulkCreate([
         {
-            user: 1,
+            user: "glennol",
             bio: "The best Javascript and NodeJS developer the world has ever seen. Bit of a douche though",
             date_created: "2019-01-01;13:37",
             profilepic: "",
         },
         {
-            user: 2,
+            user: "oscarekh",
             bio: "A master of Android development",
             date_created: "2019-01-01;13:38",
             profilepic: ""
         },
         {
-            user: 3,
+            user: "linusri",
             bio: "Pleb",
             date_created: "2019-02-22;12:08",
             profilepic: ""
         },
         {
-            user: 4,
+            user: "frnorlin",
             bio: "From Norrland",
             date_created: "2019-02-22;04:30",
             profilepic: ""
@@ -231,32 +231,32 @@ function sampleRest(){
 
     ProfileComment.bulkCreate([
         {
-            userto: 1,
-            userfrom: 3,
+            useto: "glennol",
+            userfrom: "linusri",
             comment: "I wish I was just like you",
             date: "2019-02-21;23:59"
         },
         {
-            userto: 1,
-            userfrom: 4,
+            useto: "glennol",
+            userfrom: "frnorlin",
             comment: "This project is so much cooler than ours",
             date: "2019-02-22;12:22"
         },
         {
-            userto: 2,
-            userfrom: 4,
+            useto: "oscarekh",
+            userfrom: "frnorlin",
             comment: "Wow this app sure is something! Well done",
             date: "2019-02-21;13:02"
         },
         {
-            userto: 4,
-            userfrom: 3,
+            usetor: "frnorlin",
+            userfrom: "linusri",
             comment: "Maybe we should just wash our app down the drain?",
             date: "2019-02-22;08:46"
         },
         {
-            userto: 3,
-            userfrom: 3,
+            useto: "linusri",
+            userfrom: "linusri",
             comment: "You are the only one more dumb than me",
             date: "2019-02-24;08:18"
         },

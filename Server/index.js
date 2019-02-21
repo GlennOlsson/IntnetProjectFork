@@ -1,2 +1,2 @@
 require('./controllers/rest.controller');
-require('./database/ORM');
+require('./models/ORM');
