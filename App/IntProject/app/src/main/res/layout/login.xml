@@ -47,7 +47,7 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:inputType="textPassword"
-            android:text="Hunter2"
+            android:text="hunter2"
             android:textColor="@color/colorBlue"
             android:textStyle="normal"
             android:backgroundTint="@color/colorBlue"
