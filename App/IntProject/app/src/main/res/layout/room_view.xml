@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorWhite"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+    <TextView
+            android:id="@+id/txtRoomName"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_weight="5"
+            android:text="Snacket"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/colorBg"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="30dp"/>
+
+    <TextView
+            android:id="@+id/txtOnlineCount"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:text="31"
+            android:textSize="20sp"
+            android:textColor="@color/colorBg"
+            android:gravity="center_vertical"/>
+
+</LinearLayout>
