@@ -73,7 +73,7 @@ Login to app with username and password
 ```
 
 ### /comment/:username
-Comment on a users profile\
+Comment on a users profile. The user to comment on is :username
 
 #### Request body
 ```json

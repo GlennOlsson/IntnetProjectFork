@@ -301,6 +301,11 @@ function sampleRest(){
             date: "2019-02-24;08:18"
         },
     ]);
+
+    AccountTokens.create({
+        user: 'glennol',
+        token: "testtoken"
+    })
 }
 
 

@@ -128,8 +128,47 @@ router.post("/login", (req, res) => {
     })
 })
 
+function padd(num){
+    return num.toString().length == 1 ? "0" + num : num;
+}
+
 router.post("/comment/:username", (req, res) => {
-    //TODO
+    let json = req.body;
+    let token = json.token;
+    let userfrom = json.name;
+    ORMModels.AccountTokens.findOne({
+        where: {
+            token: token,
+            user: userfrom
+        }
+    }).then(result => {
+        if(! result){
+            res.json({
+                success: false,
+                reason: 'No account matched token and username'
+            });
+            return;
+        }
+        let commentOn = req.params.username;
+        let comment = json.comment;
+        
+        let now = new Date();
+        let YY = padd(now.getFullYear())
+        let MM = padd(now.getMonth());
+        let DD = padd(now.getDay());
+        let HH = padd(now.getHours());
+        let mm = padd(now.getMinutes());
+        let date = YY + "-" + MM + "-" + DD  + ";" + HH + ":" + mm;
+
+        ORMModels.ProfileComment.create({
+            userto: commentOn, 
+            userfrom: userfrom,
+            comment: comment,
+            date: date
+        }).then(result => {
+            res.json({success: true})
+        })
+    })
 })
 
 //TODO: HASH PASSWORD
