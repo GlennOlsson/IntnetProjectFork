@@ -7,7 +7,7 @@ const Message = require('../models/Message');
 const router = express.Router();
 exports.router = router
 
-router.get("/rooms", (res, req) => {
+router.get("/rooms", (req, res) => {
     let returnRooms = []
     ORMModels.ChatRoom.findAll().then((rooms) => {
         rooms.forEach(room => {
@@ -20,13 +20,13 @@ router.get("/rooms", (res, req) => {
             }
             returnRooms.push(thisRoom);
         });
-        req.json(returnRooms);
+        res.json(returnRooms);
     })
 })
 
-router.get("/room/:id", (res, req) => {
+router.get("/room/:id", (req, res) => {
     let returnMessages = []
-    let chatID = res.params.id;
+    let chatID = req.params.id;
     ORMModels.Messages.findAll({
         where: {
             chatid: chatID
@@ -43,14 +43,14 @@ router.get("/room/:id", (res, req) => {
             }
             returnMessages.push(thisMessage);
         })
-        req.json({
+        res.json({
             messages: returnMessages
         })
     } )
 })
 
-router.get("/profile/:username", (res, req) => {
-    let name = res.params.username;
+router.get("/profile/:username", (req, res) => {
+    let name = req.params.username;
     console.log(name);
     ORMModels.Account.findOne({
         where: {
@@ -89,7 +89,7 @@ router.get("/profile/:username", (res, req) => {
                 date: comment.date
             }
         });
-        req.json({
+        res.json({
             created,
             picture,
             bio,
@@ -99,13 +99,66 @@ router.get("/profile/:username", (res, req) => {
     }).catch(er => console.log(er))
 })
 
-router.post("/login", (res, req) => {
+router.post("/login", (req, res) => {
+    let json = req.body;
+    let name = json.name;
+    let pass = json.password;
+    let hashedPass = hash(pass);
+    ORMModels.Account.findOne({
+        where:{
+            username: name,
+            passhash: hashedPass
+        }
+    }).then(acc => {
+        if(!acc){
+            res.json({success: false});
+            return;
+        }
+        
+        let token = generateToken();
+        ORMModels.AccountTokens.create({
+            user: name,
+            token
+        }).then(() => {
+            res.json({
+                success: true,
+                token
+            })
+        })
+    })
+})
+
+router.post("/comment/:username", (req, res) => {
     //TODO
 })
 
-router.post("/comment/:username", (res, req) => {
-    //TODO
-})
+//TODO: HASH PASSWORD
+function hash(pass) {
+    return pass;
+}
+
+const abc = "abcdefghijklmnopqrstuvwxyz1234567890"
+
+function randomNumb(min, max){
+    return Math.floor((Math.random()*max) + min);
+}
+
+function generateToken(){
+    //Random length between 50 and 100 chars
+    let length = randomNumb(50, 100);
+    let token = "";
+    for(let i = 0; i < length; i++){
+        //Pick a random letter of abc
+        let index = randomNumb(0, abc.length);
+        let appender = abc[index];
+        //50% should be uppercase (avg)
+        if(randomNumb(1,2) == 1){
+            appender = appender.toUpperCase();
+        }
+        token += appender;
+    }
+    return token;
+}
 
 const app = express();
 app.use(express.json());

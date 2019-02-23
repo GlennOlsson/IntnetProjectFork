@@ -94,6 +94,17 @@ const Friends = sequelize.define('friends', {
     },
 });
 
+const AccountTokens = sequelize.define('accounttokens', {
+    user: {
+        type: Sequelize.STRING,
+        references: {
+            model: Account,
+            key: 'username'
+        }
+    },
+    token: Sequelize.STRING
+})
+
 Account.hasMany(Messages, {foreignKey: "userid"});
 Messages.belongsTo(Account, {foreignKey: "userid"});
 
@@ -137,6 +148,9 @@ Friends.belongsTo(Account, {
     as:'u2',
     foreignKey: "user2"
 });
+
+Account.hasMany(AccountTokens, {foreignKey: "user"});
+AccountTokens.belongsTo(Account, {foreignKey: "user"});
 
 sequelize.sync({force: true}).then(() => createSample());
 
@@ -306,3 +320,4 @@ exports.Messages = Messages;
 exports.Friends = Friends;
 exports.Profile = Profile;
 exports.ProfileComment = ProfileComment;
+exports.AccountTokens = AccountTokens;
