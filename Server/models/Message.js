@@ -1,6 +1,6 @@
 
 
-export default class Message {
+class Message {
     constructor(chatid, userid, content, date){
         this.chat = chatid;
         this.user = userid;
@@ -8,3 +8,5 @@ export default class Message {
         this.date = date;
     }
 }
+
+exports.Message = Message;

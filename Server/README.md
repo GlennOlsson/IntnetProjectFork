@@ -5,11 +5,13 @@ Fetch all rooms possible to join
 
 #### Response body
 ```json
-{
-    "name": "ROOM NAME (STRING)",
-    "userscount": "COUNT OF USERS IN (INTEGER)",
-    "id": "ROOM ID"
-}
+[
+    {
+        "name": "ROOM NAME (STRING)",
+        "userscount": "COUNT OF USERS IN (INTEGER)",
+        "id": "ROOM ID"
+    }
+]
 ```
 
 ### /room/:id
@@ -79,5 +81,16 @@ Comment on a users profile\
     "token": "COMMENTER TOKEN (STRING)",
     "name": "COMMENTER USERNAME (STRING)",
     "comment": "COMMENT CONTENT (STRING)"
+}
+```
+
+### /friend/:username
+Befriend someone\
+
+#### Request body
+```json
+{
+    "token": "COMMENTER TOKEN (STRING)",
+    "friend": "USERNAME OF FRIEND (STRING)"
 }
 ```

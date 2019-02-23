@@ -2,7 +2,8 @@ const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize({
     host: 'localhost',
-	username: 'glenn',
+    username: 'intnet',
+    password: 'inget',
 	database: 'intnetproj',
     dialect: 'postgres',
     logging: false
@@ -99,18 +100,43 @@ Messages.belongsTo(Account, {foreignKey: "userid"});
 ChatRoom.hasMany(Messages, {foreignKey: "chatid"});
 Messages.belongsTo(ChatRoom, {foreignKey: "chatid"});
 
-Account.hasMany(ProfileComment, {foreignKey: "userto"});
-ProfileComment.belongsTo(Account, {foreignKey: "userto"});
-Account.hasMany(ProfileComment, {foreignKey: "userfrom"});
-ProfileComment.belongsTo(Account, {foreignKey: "userfrom"});
+Account.hasMany(ProfileComment, {
+    foreignKey: "userto",
+    as: 'uto'
+});
+
+ProfileComment.belongsTo(Account, {
+    foreignKey: "userto",
+    as:'uto'
+});
+Account.hasMany(ProfileComment, {
+    foreignKey: "userfrom",
+    as:'ufrom'
+});
+ProfileComment.belongsTo(Account, {
+    foreignKey: "userfrom",
+    as:'ufrom'
+});
 
 Account.hasOne(Profile, {foreignKey: "user"});
 Profile.belongsTo(Account, {foreignKey: "user"});
 
-Account.hasMany(Friends, {foreignKey: "user1"});
-Friends.belongsTo(Account, {foreignKey: "user1"});
-Account.hasMany(Friends, {foreignKey: "user2"});
-Friends.belongsTo(Account, {foreignKey: "user2"});
+Account.hasMany(Friends, {
+    as: 'u1',
+    foreignKey: "user1"
+});
+Friends.belongsTo(Account, {
+    as: 'u1',
+    foreignKey: "user1"
+});
+Account.hasMany(Friends, {
+    as: 'u2',
+    foreignKey: "user2"
+});
+Friends.belongsTo(Account, {
+    as:'u2',
+    foreignKey: "user2"
+});
 
 sequelize.sync({force: true}).then(() => createSample());
 
@@ -231,31 +257,31 @@ function sampleRest(){
 
     ProfileComment.bulkCreate([
         {
-            useto: "glennol",
+            userto: "glennol",
             userfrom: "linusri",
             comment: "I wish I was just like you",
             date: "2019-02-21;23:59"
         },
         {
-            useto: "glennol",
+            userto: "glennol",
             userfrom: "frnorlin",
             comment: "This project is so much cooler than ours",
             date: "2019-02-22;12:22"
         },
         {
-            useto: "oscarekh",
+            userto: "oscarekh",
             userfrom: "frnorlin",
             comment: "Wow this app sure is something! Well done",
             date: "2019-02-21;13:02"
         },
         {
-            usetor: "frnorlin",
+            userto: "frnorlin",
             userfrom: "linusri",
             comment: "Maybe we should just wash our app down the drain?",
             date: "2019-02-22;08:46"
         },
         {
-            useto: "linusri",
+            userto: "linusri",
             userfrom: "linusri",
             comment: "You are the only one more dumb than me",
             date: "2019-02-24;08:18"
@@ -273,3 +299,10 @@ function createSample(){
 
     console.log("Created");
 }
+
+exports.Account = Account;
+exports.ChatRoom = ChatRoom;
+exports.Messages = Messages;
+exports.Friends = Friends;
+exports.Profile = Profile;
+exports.ProfileComment = ProfileComment;

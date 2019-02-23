@@ -1,28 +1,30 @@
 
-export default class Chatroom{
+class Chatroom{
     constructor(id, name){
         this.id = id;
         this.name = name;
         this.users = [];
         this.messages = [];
-    }
 
-    addMessage(message){
-        this.messages.push(message);
-    }
+        this.addMessage = function(message){
+            this.messages.push(message);
+        }
 
-    addUser(user){
-        this.users.push(user);
-    }
+        this.addUser = function(user){
+            this.users.push(user);
+        }
 
-    removeUser(userObject){
-        index = 0;
-        for(user of users){
-            if(user.id == userObject.id){
-                users.splice(index, 1);
-                break;
+        this.removeUser = function(userObject){
+            index = 0;
+            for(user of users){
+                if(user.id == userObject.id){
+                    users.splice(index, 1);
+                    break;
+                }
+                index++;
             }
-            index++;
         }
     }
 }
+
+module.exports = Chatroom

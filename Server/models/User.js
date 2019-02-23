@@ -1,6 +1,6 @@
 
 
-export default class User{
+class User{
     constructor(name, bio, dateCreated, profilePic){
         this.name = name;
         this.bio = bio;
@@ -8,4 +8,10 @@ export default class User{
         this.profilePic = profilePic;
         this.friends = [];
     }
+
+    addFriend(user){
+        friends.push(user);
+    }
 }
+
+exports.User = User;
