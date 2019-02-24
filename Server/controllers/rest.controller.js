@@ -252,6 +252,45 @@ router.post("/friend/:username", (req, res) => {
     });
 });
 
+
+router.post("/login", (req, res) => {
+    let json = req.body;
+    let name = json.name;
+    let pass = json.password;
+    hash(pass, (err, hash) => {
+        if(err){
+            res.json({
+                success: false,
+                reason: "Could not generate a password"
+            });
+            return;
+        }
+
+        ORMModels.Account.findOrCreate({
+            where: {
+                username: name
+            },
+            defaults: {
+                username: name,
+                password: hash
+            }
+        }).spread((result, created) => {
+            if(! created){
+                res.json({
+                    success: false,
+                    reason: "Already a user with that username"
+                });
+                return;
+            }
+            res.json({
+                success: true
+            })
+        });
+    })
+        
+
+});
+
 //TODO: HASH PASSWORD
 function hash(pass, callback) {
     bcrypt.genSalt(10, (err, salt) => {

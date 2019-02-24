@@ -94,3 +94,23 @@ Befriend someone. The user to befriend is :username
     "nane": "BEFRIENDER USERNMAE (STRING)"
 }
 ```
+
+## POSTs
+### /newaccount
+Create a new account with username and password
+
+#### Request body
+```json
+{
+    "name": "USERNAME (STRING)",
+    "password": "PASSWORD (STRING)"
+}
+```
+
+#### Response body
+```json
+{
+    "success": "SUCCESS (BOOLEAN)",
+    "reason": "DESCRIBE UNSUCCESS (STRING, UNDEFINED IF SUCCESS = TRUE"
+}
+```

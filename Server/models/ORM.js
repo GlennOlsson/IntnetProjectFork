@@ -155,6 +155,7 @@ AccountTokens.belongsTo(Account, {foreignKey: "user"});
 sequelize.sync({force: true}).then(() => createSample());
 
 function sampleAccount(){
+    //Passwords are hunter2
     return Account.bulkCreate([
         {
             username: "glennol",
