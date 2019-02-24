@@ -319,6 +319,7 @@ function createSample(){
     console.log("Created");
 }
 
+exports.sequelize = sequelize;
 exports.Account = Account;
 exports.ChatRoom = ChatRoom;
 exports.Messages = Messages;

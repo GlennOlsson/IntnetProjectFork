@@ -85,12 +85,12 @@ Comment on a users profile. The user to comment on is :username
 ```
 
 ### /friend/:username
-Befriend someone\
+Befriend someone. The user to befriend is :username
 
 #### Request body
 ```json
 {
-    "token": "COMMENTER TOKEN (STRING)",
-    "friend": "USERNAME OF FRIEND (STRING)"
+    "token": "BEFRIENDER TOKEN(STRING)",
+    "nane": "BEFRIENDER USERNMAE (STRING)"
 }
 ```

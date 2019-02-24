@@ -1,6 +1,8 @@
 const express = require('express');
 const http = require('http');
 const ORMModels = require('../models/ORM');
+const Op = ORMModels.sequelize.Op;
+
 const Chatroom = require('../models/Chatroom');
 const Message = require('../models/Message');
 
@@ -165,11 +167,70 @@ router.post("/comment/:username", (req, res) => {
             userfrom: userfrom,
             comment: comment,
             date: date
-        }).then(result => {
+        }).then(() => {
             res.json({success: true})
         })
     })
-})
+});
+
+router.post("/friend/:username", (req, res) => {
+    let json = req.body;
+    let token = json.token;
+    let userfrom = json.name;
+    ORMModels.AccountTokens.findOne({
+        where: {
+            token: token,
+            user: userfrom
+        }
+    }).then(result => {
+        if(! result){
+            res.json({
+                success: false,
+                reason: 'No account matched token and username'
+            });
+            return;
+        }
+        let friend = req.params.username;
+
+        ORMModels.Friends.findOrCreate({
+            where: {
+                [Op.or]: [
+                    {
+                        [Op.and]: [
+                            {
+                                user1: userfrom, 
+                                user2: friend
+                            }
+                        ]
+                    },
+                    {
+                        [Op.and]: [
+                            {
+                                user1: friend, 
+                                user2: userfrom
+                            }
+                        ]
+                    }
+                ]
+            },
+            defaults: {
+                user1: userfrom,
+                user2: friend
+            }
+        }).spread((result, created) => {
+            if(! created){
+                res.json({
+                    success: false,
+                    reason: 'The friendship already exists'
+                });
+                return;
+            }
+            res.json({
+                success: true
+            })
+        });
+    });
+});
 
 //TODO: HASH PASSWORD
 function hash(pass) {
