@@ -158,19 +158,19 @@ function sampleAccount(){
     return Account.bulkCreate([
         {
             username: "glennol",
-            passhash: "hunter2"
+            passhash: "$2b$10$Vks4DREylBTTeXPNmm8XjeyimmEOeCsnr.fTUSsLJ7SgsvBpmyjuC"
         },
         {
             username: "oscarekh",
-            passhash: "hunter2"
+            passhash: "$2b$10$BvgF4QiOoW8Nt4QOcqHv4uuaRg8VNRd4PV0ZP8gfhEoHQT4xIzmHO"
         },
         {
             username: "linusri",
-            passhash: "hunter2"
+            passhash: "$2b$10$2GsI4zTnJ.2jvpqY21oQ9uGsl4JK6JEnigdCHME5O6ZkPB1K4cQLe"
         },
         {
             username: "frnorlin",
-            passhash: "hunter2"
+            passhash: "$2b$10$627nicg0Zi3Fr0YpdSf9s.ceJTN8b2/YpyF7TOMmrP.lXealDtrsC"
         },
     ]);
 }

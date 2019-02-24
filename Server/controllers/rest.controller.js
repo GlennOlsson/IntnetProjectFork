@@ -6,6 +6,8 @@ const Op = ORMModels.sequelize.Op;
 const Chatroom = require('../models/Chatroom');
 const Message = require('../models/Message');
 
+const bcrypt = require('bcrypt');
+
 const router = express.Router();
 exports.router = router
 
@@ -105,30 +107,48 @@ router.post("/login", (req, res) => {
     let json = req.body;
     let name = json.name;
     let pass = json.password;
-    let hashedPass = hash(pass);
+
+    hash(pass, (err, hash) => {
+        console.log("hash: ",hash, err);
+        bcrypt.compare(pass, '$2b$10$6iZfRyXRPgdcgcVKae53cu5FfktNKiU4RlgLgwbQdGbhobCakkoQe', (err, res) => {
+            console.log(res);
+        })
+    });
+
     ORMModels.Account.findOne({
         where:{
-            username: name,
-            passhash: hashedPass
+            username: name
         }
     }).then(acc => {
         if(!acc){
             res.json({success: false});
             return;
         }
-        
-        let token = generateToken();
-        ORMModels.AccountTokens.create({
-            user: name,
-            token
-        }).then(() => {
-            res.json({
-                success: true,
+
+        let currentHash = acc.passhash;
+        bcrypt.compare(pass, currentHash, (err, equal) => {
+            if(!equal){
+                res.json({
+                    success: false
+                });
+                return;
+            }
+
+            let token = generateToken();
+            ORMModels.AccountTokens.create({
+                user: name,
                 token
+            }).then(() => {
+                res.json({
+                    success: true,
+                    token
+                })
             })
+
         })
-    })
-})
+
+    });
+});
 
 function padd(num){
     return num.toString().length == 1 ? "0" + num : num;
@@ -233,8 +253,11 @@ router.post("/friend/:username", (req, res) => {
 });
 
 //TODO: HASH PASSWORD
-function hash(pass) {
-    return pass;
+function hash(pass, callback) {
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(pass, salt, (err, hash) => 
+            callback(err, hash));
+    });
 }
 
 const abc = "abcdefghijklmnopqrstuvwxyz1234567890"
