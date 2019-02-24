@@ -253,7 +253,7 @@ router.post("/friend/:username", (req, res) => {
 });
 
 
-router.post("/login", (req, res) => {
+router.post("/newuser", (req, res) => {
     let json = req.body;
     let name = json.name;
     let pass = json.password;
@@ -272,7 +272,7 @@ router.post("/login", (req, res) => {
             },
             defaults: {
                 username: name,
-                password: hash
+                passhash: hash
             }
         }).spread((result, created) => {
             if(! created){
