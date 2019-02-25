@@ -3,9 +3,6 @@ const http = require('http');
 const ORMModels = require('../models/ORM');
 const Op = ORMModels.sequelize.Op;
 
-const Chatroom = require('../models/Chatroom');
-const Message = require('../models/Message');
-
 const bcrypt = require('bcrypt');
 
 const router = express.Router();

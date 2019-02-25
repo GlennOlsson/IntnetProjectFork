@@ -114,3 +114,54 @@ Create a new account with username and password
     "reason": "DESCRIBE UNSUCCESS (STRING, UNDEFINED IF SUCCESS = TRUE"
 }
 ```
+
+# SocketIO-API
+## IO emits (client)
+Client emits content to io (all other clients and server), as in
+```javascript
+    let chats = io.of("/chat"); //Chat is the namespace
+    chats.to(":chatid").emit(...); //:chatid is the group
+```
+
+This means that a client can both send and recieve these so it must implement functionallity for both
+
+### join
+A user joins a new chatroom
+#### Body
+```json
+{
+    "username": "USERNAME (STRING)"
+}
+```
+
+### leave
+A user leaves a chatroom on own behalf
+#### Body
+```json
+{
+    "username": "USERNAME (STRING)",
+    "reason": "Disconnected (STATIC)"
+}
+```
+
+### message
+A new message is sent in a chat
+```json
+{
+    "username": "SENT USERNAME (STRING)",
+    "content": "MESSAGE CONTNET (STRING)",
+    
+}
+```
+
+## IO emits (server)
+### leave
+A user is timed-out
+
+#### Body
+```json
+{
+    "username": "USERNAME (STRING)",
+    "reason": "Timed out (STATIC)"
+}
+```
