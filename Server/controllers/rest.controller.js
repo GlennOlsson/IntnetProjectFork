@@ -108,13 +108,6 @@ router.post("/login", (req, res) => {
     let name = json.name;
     let pass = json.password;
 
-    hash(pass, (err, hash) => {
-        console.log("hash: ",hash, err);
-        bcrypt.compare(pass, '$2b$10$6iZfRyXRPgdcgcVKae53cu5FfktNKiU4RlgLgwbQdGbhobCakkoQe', (err, res) => {
-            console.log(res);
-        })
-    });
-
     ORMModels.Account.findOne({
         where:{
             username: name
@@ -252,7 +245,6 @@ router.post("/friend/:username", (req, res) => {
     });
 });
 
-
 router.post("/newuser", (req, res) => {
     let json = req.body;
     let name = json.name;
@@ -290,8 +282,12 @@ router.post("/newuser", (req, res) => {
         
 
 });
-
-//TODO: HASH PASSWORD
+ 
+/**
+ * Hash a plain text password using bcyrpt
+ * @param {string} pass the plain text password to hash
+ * @param {function(err, hash)} callback function to call when finished with hashing
+ */
 function hash(pass, callback) {
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(pass, salt, (err, hash) => 
@@ -305,6 +301,9 @@ function randomNumb(min, max){
     return Math.floor((Math.random()*max) + min);
 }
 
+/**
+ * Generate a reandom login token
+ */
 function generateToken(){
     //Random length between 50 and 100 chars
     let length = randomNumb(50, 100);
