@@ -52,7 +52,7 @@
     <LinearLayout
             android:id="@+id/linControls"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:orientation="horizontal">
 
         <EditText
@@ -60,12 +60,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="10"
+                android:layout_marginVertical="10dp"
+                android:layout_marginLeft="10dp"
                 android:backgroundTint="@color/colorYellow"/>
         <Button
                 android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:layout_margin="10dp"
                 android:text="Send"
                 android:background="@drawable/rounded_corners_btn"/>
 

@@ -7,14 +7,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 class RoomView : LinearLayout, View.OnClickListener {
-
-    constructor(context: Context, name: String, onlineCount: Int) : super(context) {
+    var id : String = ""
+    constructor(context: Context, name: String, onlineCount: Int, roomId: String) : super(context) {
         inflate(context, R.layout.room_view, this)
 
         val txtRoomName: TextView = findViewById(R.id.txtRoomName)
         val txtOnlineCount: TextView = findViewById(R.id.txtOnlineCount)
         txtRoomName.text = name
         txtOnlineCount.text = onlineCount.toString()
+
+        id = roomId
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {

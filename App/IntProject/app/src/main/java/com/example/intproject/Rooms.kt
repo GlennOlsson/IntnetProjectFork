@@ -41,7 +41,7 @@ class Rooms : AppCompatActivity() {
                         val name = room.getString("name")
                         val count = room.getInt("usercount")
 
-                        linRooms.addView(createRoomView( name, count))
+                        linRooms.addView(createRoomView(name, count, id))
                     }
                 } catch (e : Exception) {
                     txtDebug.text = "OnCreate: " + e.toString()
@@ -60,10 +60,12 @@ class Rooms : AppCompatActivity() {
             val r: RoomView = v as RoomView
             val name: String = r.txtRoomName.text.toString()
             val count: String = r.txtOnlineCount.text.toString()
+            val id: String = r.id
 
             val intent = Intent(this, Chat::class.java)
             intent.putExtra("name", name)
             intent.putExtra("count", count)
+            intent.putExtra("id", id)
             startActivity(intent)
         } catch (e: Exception) {
             txtDebug.text = "EnterRoom: " + e.toString()
@@ -71,17 +73,16 @@ class Rooms : AppCompatActivity() {
 
     }
 
-    private fun createRoomView(name: String, count: Int): RoomView {
+    private fun createRoomView(name: String, count: Int, id: String): RoomView {
         try {
-            val room: RoomView = RoomView(this, name, count)
+            val room: RoomView = RoomView(this, name, count, id)
             room.setOnClickListener {
                 enterRoom(room)
             }
-
             return room
         } catch (e: Exception) {
             txtDebug.text = "CreateRoom: " + e.toString()
         }
-        return RoomView(this, "errorview", -1)
+        return RoomView(this, "errorview", -1, "")
     }
 }
