@@ -95,7 +95,6 @@ Befriend someone. The user to befriend is :username
 }
 ```
 
-## POSTs
 ### /newaccount
 Create a new account with username and password
 
@@ -115,15 +114,36 @@ Create a new account with username and password
 }
 ```
 
+____
 # SocketIO-API
-## IO emits (client)
-Client emits content to io (all other clients and server), as in
-```javascript
-    let chats = io.of("/chat"); //Chat is the namespace
-    chats.to(":chatid").emit(...); //:chatid is the group
+## Socket emits
+These are the requests sent to the server. Specified as socket.emit(...) by client
+
+### join
+A user joins a new chatroom
+#### Body
+```json
+{
+    "username": "USERNAME (STRING)",
+    "chatid": "CHAT ID (INTEGER)",
+}
 ```
 
-This means that a client can both send and recieve these so it must implement functionallity for both
+### leave
+A user leaves a chatroom on own behalf. No body required
+
+### message
+A new message is sent in a chat
+
+#### Body
+```json
+{
+    "content": "MESSAGE CONTENT (STRING)"
+}
+```
+
+## IO emits
+Emits sent by server. Specified as socket.on(...) by client
 
 ### join
 A user joins a new chatroom
@@ -135,33 +155,23 @@ A user joins a new chatroom
 ```
 
 ### leave
-A user leaves a chatroom on own behalf
-#### Body
-```json
-{
-    "username": "USERNAME (STRING)",
-    "reason": "Disconnected (STATIC)"
-}
-```
-
-### message
-A new message is sent in a chat
-```json
-{
-    "username": "SENT USERNAME (STRING)",
-    "content": "MESSAGE CONTNET (STRING)",
-    
-}
-```
-
-## IO emits (server)
-### leave
 A user is timed-out
 
 #### Body
 ```json
 {
     "username": "USERNAME (STRING)",
-    "reason": "Timed out (STATIC)"
+    "reason": "REASON TO LEAVE (STRING)"
+}
+```
+
+### message
+A new message is sent in a chat
+
+#### Body
+```json
+{
+    "username": "SENT USERNAME (STRING)",
+    "content": "MESSAGE CONTENT (STRING)",
 }
 ```

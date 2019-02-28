@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+console.log("SEQ");
+
 const sequelize = new Sequelize({
     host: 'localhost',
     username: 'intnet',
@@ -320,6 +322,23 @@ function createSample(){
     console.log("Created");
 }
 
+
+function padd(num){
+    return num.toString().length == 1 ? "0" + num : num;
+}
+
+function getCurrentTime(){
+    let now = new Date();
+    let YY = padd(now.getFullYear())
+    let MM = padd(now.getMonth());
+    let DD = padd(now.getDay());
+    let HH = padd(now.getHours());
+    let mm = padd(now.getMinutes());
+    let date = YY + "-" + MM + "-" + DD  + ";" + HH + ":" + mm;
+
+    return date;
+}
+
 exports.sequelize = sequelize;
 exports.Account = Account;
 exports.ChatRoom = ChatRoom;
@@ -328,3 +347,4 @@ exports.Friends = Friends;
 exports.Profile = Profile;
 exports.ProfileComment = ProfileComment;
 exports.AccountTokens = AccountTokens;
+exports.getCurrentTime = getCurrentTime;

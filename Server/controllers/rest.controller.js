@@ -1,14 +1,16 @@
 const express = require('express');
-const http = require('http');
 const ORMModels = require('../models/ORM');
 const Op = ORMModels.sequelize.Op;
 
 const bcrypt = require('bcrypt');
 
+console.log("HERE")
 const router = express.Router();
-exports.router = router
+module.exports = router
+console.log("NOT HERE")
 
 router.get("/rooms", (req, res) => {
+    console.log("/rooms")
     let returnRooms = []
     ORMModels.ChatRoom.findAll().then((rooms) => {
         rooms.forEach(room => {
@@ -24,6 +26,9 @@ router.get("/rooms", (req, res) => {
         res.json(returnRooms);
     })
 })
+
+
+console.log("HERE BOII")
 
 router.get("/room/:id", (req, res) => {
     let returnMessages = []
@@ -105,6 +110,8 @@ router.post("/login", (req, res) => {
     let name = json.name;
     let pass = json.password;
 
+    console.log("Login", name, pass);
+
     ORMModels.Account.findOne({
         where:{
             username: name
@@ -112,6 +119,7 @@ router.post("/login", (req, res) => {
     }).then(acc => {
         if(!acc){
             res.json({success: false});
+            console.log("SUCCESS");
             return;
         }
 
@@ -121,6 +129,7 @@ router.post("/login", (req, res) => {
                 res.json({
                     success: false
                 });
+                console.log("SUCCESS");
                 return;
             }
 
@@ -129,6 +138,7 @@ router.post("/login", (req, res) => {
                 user: name,
                 token
             }).then(() => {
+                console.log("SUCCESS");
                 res.json({
                     success: true,
                     token
@@ -139,10 +149,6 @@ router.post("/login", (req, res) => {
 
     });
 });
-
-function padd(num){
-    return num.toString().length == 1 ? "0" + num : num;
-}
 
 router.post("/comment/:username", (req, res) => {
     let json = req.body;
@@ -163,14 +169,8 @@ router.post("/comment/:username", (req, res) => {
         }
         let commentOn = req.params.username;
         let comment = json.comment;
-        
-        let now = new Date();
-        let YY = padd(now.getFullYear())
-        let MM = padd(now.getMonth());
-        let DD = padd(now.getDay());
-        let HH = padd(now.getHours());
-        let mm = padd(now.getMinutes());
-        let date = YY + "-" + MM + "-" + DD  + ";" + HH + ":" + mm;
+
+        let date = ORMModels.getCurrentTime();
 
         ORMModels.ProfileComment.create({
             userto: commentOn, 
@@ -317,13 +317,3 @@ function generateToken(){
     }
     return token;
 }
-
-const app = express();
-app.use(express.json());
-app.use("/", router);
-
-const httpServer = http.Server(app);
-
-httpServer.listen(80, () => {
-    console.log("Server running");
-})
