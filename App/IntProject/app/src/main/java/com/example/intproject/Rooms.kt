@@ -7,9 +7,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ScrollView
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_rooms.*
 import kotlinx.android.synthetic.main.room_view.view.*
+import org.json.JSONArray
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
 
 class Rooms : AppCompatActivity() {
 
@@ -17,17 +28,31 @@ class Rooms : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rooms)
 
-        // Add rooms dynamically
-        try {
-            linRooms.addView(createRoomView( "Snacket", 25))
-            linRooms.addView(createRoomView( "Tugget", 31))
-            linRooms.addView(createRoomView( "Käket", 11))
-            linRooms.addView(createRoomView( "Hörnet", 27))
-            linRooms.addView(createRoomView( "Fredagsmys", 14))
-            linRooms.addView(createRoomView( "Chillkanalen", 32))
-        } catch (e: Exception) {
-            txtDebug.text = "OnCreate: " + e.toString()
-        }
+        var url = "http://130.229.132.61/rooms"
+        val queue = Volley.newRequestQueue(this)
+
+        val req = JsonArrayRequest(Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                try {
+                    for (i in 0..response.length()-1) {
+                        val room = response.getJSONObject(i)
+
+                        val id = room.getString("id")
+                        val name = room.getString("name")
+                        val count = room.getInt("usercount")
+
+                        linRooms.addView(createRoomView( name, count))
+                    }
+                } catch (e : Exception) {
+                    txtDebug.text = "OnCreate: " + e.toString()
+                }
+            },
+            Response.ErrorListener { error ->
+                txtDebug.text = error.message
+            })
+
+        queue.add(req)
+        queue.start()
     }
 
     private fun enterRoom(v: View?) {
