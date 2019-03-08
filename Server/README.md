@@ -1,3 +1,6 @@
+Url to endpoint is
+https://glennolsson.se/intnet/
+
 # REST-API
 ## GETs
 ### /rooms
@@ -110,17 +113,18 @@ Create a new account with username and password
 ```json
 {
     "success": "SUCCESS (BOOLEAN)",
-    "reason": "DESCRIBE UNSUCCESS (STRING, UNDEFINED IF SUCCESS = TRUE"
+    "reason": "DESCRIBE UNSUCCESS (STRING, UNDEFINED IF SUCCESS = TRUE)"
 }
 ```
 
 ____
 # SocketIO-API
+Endpoint is /socket.io
 ## Socket emits
 These are the requests sent to the server. Specified as socket.emit(...) by client
 
 ### init
-Init client connection with username. This must be done before any other socket call
+Init client connection with username. **This must be done before any other socket call**
 
 #### Body
 ```json

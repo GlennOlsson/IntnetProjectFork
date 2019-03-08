@@ -11,6 +11,15 @@ function setup(httpServer){
 
 function socketController(socket, io){
     console.log("New connection");
+
+    socket.on("init", req => {
+        console.log("Init: ", req);
+        let json = JSON.parse(req);
+        let user = json.username;
+
+        socket.username = user;      
+    });
+
     socket.on("message", req => {
         console.log("Message: ", req);
         let json = JSON.parse(req);
@@ -32,10 +41,9 @@ function socketController(socket, io){
     socket.on("join", req => {
         let json = JSON.parse(req);
         let chatid = json.chatid;
-        let user = json.username;
+        let user = socket.username;
         console.log("Joined room ", user, chatid);
         socket.chatid = chatid;
-        socket.username = user;
         socket.join(chatid, () => {
             io.to(chatid).emit("join", {username: user});
         });
