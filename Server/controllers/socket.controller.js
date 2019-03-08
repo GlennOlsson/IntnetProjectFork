@@ -1,4 +1,5 @@
 const ORMModels = require('../models/ORM');
+const models = require('../models');
 
 function setup(httpServer){
 
@@ -16,8 +17,9 @@ function socketController(socket, io){
         console.log("Init: ", req);
         let json = JSON.parse(req);
         let user = json.username;
+        models.newClient(socket);
 
-        socket.username = user;      
+        socket.username = user;
     });
 
     socket.on("message", req => {
@@ -46,7 +48,7 @@ function socketController(socket, io){
         socket.chatid = chatid;
         socket.join(chatid, () => {
             io.to(chatid).emit("join", {username: user});
-        });
+		});
     });
 
     socket.on("leave", req => {
@@ -69,7 +71,8 @@ function socketController(socket, io){
         io.to(chatid).emit("leave", {
             username: user,
             reason: "Timed out"
-        });
+		});
+		models.removeClient(user);
     });
 }
 

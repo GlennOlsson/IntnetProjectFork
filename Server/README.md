@@ -188,3 +188,13 @@ A new message is sent in a chat
     "content": "MESSAGE CONTENT (STRING)",
 }
 ```
+
+### notification
+Notification about an event sent to user. An event can be that a user befriended them or a new profile comment on their profile.
+
+#### Body
+```json
+{
+    "message": "NOTIFICATION MESSAGE (STRING)"
+}
+```
