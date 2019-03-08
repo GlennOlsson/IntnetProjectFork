@@ -4,10 +4,8 @@ const Op = ORMModels.sequelize.Op;
 
 const bcrypt = require('bcrypt');
 
-console.log("HERE")
 const router = express.Router();
 module.exports = router
-console.log("NOT HERE")
 
 router.get("/rooms", (req, res) => {
     console.log("/rooms")
