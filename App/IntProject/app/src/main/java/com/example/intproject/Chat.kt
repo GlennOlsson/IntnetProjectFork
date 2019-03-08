@@ -108,27 +108,4 @@ class Chat : AppCompatActivity() {
         queue.add(req)
         queue.start()
     }
-
-    private fun getImage(sentBy: String): Bitmap {
-        var imgB64: String = "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" // default img
-
-        var url = "https://glennolsson.se/intnet/profile/" + sentBy
-        val queue = Volley.newRequestQueue(this)
-
-        val req = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            Response.Listener<JSONObject> { response ->
-                imgB64 = response.getString("picture")
-            },
-            Response.ErrorListener { error ->
-                txtDebug.text = error.message
-            })
-        Toast.makeText(this, imgB64, Toast.LENGTH_LONG).show()
-        queue.add(req)
-        queue.start()
-
-        val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
-        val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
-        return decodedByte
-    }
 }
