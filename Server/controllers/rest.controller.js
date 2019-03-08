@@ -79,7 +79,6 @@ router.get("/profile/:username", (req, res) => {
         ]
     }).then(account => {
         let profile = account.profile;
-        console.log(Object.keys(account))
         let created = profile.date_created;
         let picture = profile.profilepic;
         let bio = profile.bio;
