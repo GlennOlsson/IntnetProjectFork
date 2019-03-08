@@ -9,7 +9,7 @@ exports.newClient = (socket) =>  {
 exports.removeClient = (username) => {
     for(clientIndex in clients){
         let client = clients[clientIndex];
-        if(client.getUsername() == username){
+        if(client.getName() == username){
             clients.splice(clientIndex, 1);
             break;
         }
@@ -30,7 +30,7 @@ exports.getClientsOfChat = (chatid) => {
 
 exports.getClient = (username) => {
     for(client of clients){
-        if(client.getUsername() == username){
+        if(client.getName() == username){
             return client;
         }
     }
