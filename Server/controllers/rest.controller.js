@@ -1,5 +1,6 @@
 const express = require('express');
 const ORMModels = require('../models/ORM');
+const models = require('../models');
 const Op = ORMModels.sequelize.Op;
 
 const bcrypt = require('bcrypt');
@@ -14,9 +15,10 @@ router.get("/rooms", (req, res) => {
         rooms.forEach(room => {
             let id = room.id;
             let name = room.name;
+            let clients = models.getClientsOfChat(id);
             let thisRoom = {
                 name: name,
-                usercount: -1, //TODO, probalby replace with list of users
+                usercount: clients.length,
                 id: id
             }
             returnRooms.push(thisRoom);

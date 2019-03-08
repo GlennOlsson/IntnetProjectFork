@@ -1,13 +1,20 @@
 
 
 class Client{
-    constructor(name, socket){
-        this.name = name;
+    constructor(socket){
         this.socket = socket;
-    }
 
-    addFriend(user){
-        friends.push(user);
+        this.getSocket = () => {
+            return this.socket;
+        }
+
+        this.getName = () => {
+            return this.socket.username;
+        }
+
+        this.getChat = () => {
+            return this.chatid;
+        }
     }
 }
 
