@@ -24,7 +24,7 @@ class Login : AppCompatActivity() {
             //val password = edtPassword.text.toString()
 
 
-            val url = "http://130.229.132.61/login"
+            val url = "https://glennolsson.se/intnet/login"
             val queue = Volley.newRequestQueue(this)
             val reqBody = JSONObject()
             reqBody.put("name", edtUsername.text.toString())

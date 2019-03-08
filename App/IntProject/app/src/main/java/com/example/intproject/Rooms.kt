@@ -28,7 +28,7 @@ class Rooms : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rooms)
 
-        var url = "http://130.229.132.61/rooms"
+        var url = "https://glennolsson.se/intnet/rooms"
         val queue = Volley.newRequestQueue(this)
 
         val req = JsonArrayRequest(Request.Method.GET, url, null,
