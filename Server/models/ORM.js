@@ -74,7 +74,7 @@ const Profile = sequelize.define('profiles', {
             key: 'username',            
         }
     },
-    profilepic: Sequelize.STRING,
+    profilepic: Sequelize.TEXT,
     bio: Sequelize.STRING,
     date_created: Sequelize.STRING
 });
