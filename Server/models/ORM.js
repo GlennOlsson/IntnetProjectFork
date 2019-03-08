@@ -250,7 +250,7 @@ function sampleRest(){
             user: "glennol",
             bio: "The best Javascript and NodeJS developer the world has ever seen. Bit of a douche though",
             date_created: "2019-01-01;13:37",
-            profilepic: ""
+            profilepic: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
         },
         {
             user: "oscarekh",
