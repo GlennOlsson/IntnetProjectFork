@@ -57,7 +57,7 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    android:text="Här är en beskrivning av mig som jag skriver för att det ska stå en beskrivning av mig på denna sida"
+                    android:text="<beskrivning>"
                     android:textStyle="normal"
                     android:textSize="18dp"
                     android:textColor="@color/colorGrey"
