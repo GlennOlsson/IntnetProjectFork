@@ -1,5 +1,6 @@
 package com.example.intproject
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.android.volley.Request
@@ -33,7 +34,7 @@ class Chat : AppCompatActivity() {
             txtName.text = "Err: " + e.toString()
         }
 
-        var url = "http://130.229.132.61/room/" + id
+        var url = "https://glennolsson.se/intnet/room/" + id
         val queue = Volley.newRequestQueue(this)
 
         val req = JsonObjectRequest(
@@ -48,8 +49,15 @@ class Chat : AppCompatActivity() {
                         val msg = message.getString("message")
                         val sentBy = message.getString("sentby")
                         //val sent = room.getInt("sent")
+                        val msgView: MessageView = MessageView(this, sentBy, msg)
+                        msgView.setOnClickListener {
+                            val username: String = sentBy
 
-                        linMessages.addView(MessageView(this, msg))
+                            val intent = Intent(this, Profile::class.java)
+                            intent.putExtra("username", username)
+                            startActivity(intent)
+                        }
+                        linMessages.addView(msgView)
                     }
                 } catch (e : Exception) {
                     txtDebug.text = "OnCreate: " + e.toString()

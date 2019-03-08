@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+        //val intent = Intent(this, Login::class.java)
         val intent = Intent(this, Login::class.java)
         //intent.putExtra("identifier", "hej")
         startActivity(intent)

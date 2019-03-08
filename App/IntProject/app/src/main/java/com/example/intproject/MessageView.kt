@@ -1,19 +1,34 @@
 package com.example.intproject
 
 import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat.startActivity
 import android.util.AttributeSet
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import kotlinx.android.synthetic.main.room_view.view.*
+
 //import kotlinx.android.synthetic.main.message_view.view.*
 
 class MessageView : LinearLayout {
 
     // Should add dynamic placing of image/message depending on who sent the message
     // current user->msg to right, other user->msg to left
-    constructor(context: Context, message: String) : super(context) {
+    constructor(context: Context, sentBy: String, message: String) : super(context) {
         inflate(context, R.layout.message_view, this)
 
+        val imgProfilePic: ImageView = findViewById(R.id.imgProfilePic)
         val txtMessage: TextView = findViewById(R.id.txtMessage)
+        /*
+        imgProfilePic.setOnClickListener {
+            val username: String = sentBy
+
+            val intent = Intent(this, Chat::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+        }*/
+
         txtMessage.text = message
     }
 
@@ -25,6 +40,7 @@ class MessageView : LinearLayout {
             val txtMessage: TextView = findViewById(R.id.txtMessage)
             val attributes = context.obtainStyledAttributes(attrs, R.styleable.MessageView)
             txtMessage.text = attributes.getString(R.styleable.MessageView_message)
+            // add sentby here as well
 
             attributes.recycle()
         }
