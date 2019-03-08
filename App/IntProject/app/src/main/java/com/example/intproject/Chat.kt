@@ -1,8 +1,12 @@
 package com.example.intproject
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -15,6 +19,8 @@ import org.json.JSONObject
 import java.lang.Exception
 
 class Chat : AppCompatActivity() {
+
+    var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +55,38 @@ class Chat : AppCompatActivity() {
                         val msg = message.getString("message")
                         val sentBy = message.getString("sentby")
                         //val sent = room.getInt("sent")
+
+
+
+                        //usernameCache.add(sentBy)
+
                         val msgView: MessageView = MessageView(this, sentBy, msg)
+
+                        val u = userCache.get(sentBy)
+                        if (u != null) {
+                            msgView.setImage(u)
+                        } else {
+                            // ugly
+
+                            var url = "https://glennolsson.se/intnet/profile/" + sentBy
+                            val queue = Volley.newRequestQueue(this)
+
+                            val req = JsonObjectRequest(
+                                Request.Method.GET, url, null,
+                                Response.Listener<JSONObject> { response ->
+                                    val imgB64: String = response.getString("picture")
+                                    val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
+                                    val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
+                                    msgView.setImage(decodedByte)
+                                    userCache.put(sentBy, decodedByte)
+                                },
+                                Response.ErrorListener { error ->
+                                    txtDebug.text = error.message
+                                })
+                            queue.add(req)
+                            queue.start()
+                        }
+
                         msgView.setOnClickListener {
                             val username: String = sentBy
 
@@ -57,6 +94,7 @@ class Chat : AppCompatActivity() {
                             intent.putExtra("username", username)
                             startActivity(intent)
                         }
+
                         linMessages.addView(msgView)
                     }
                 } catch (e : Exception) {
@@ -69,5 +107,28 @@ class Chat : AppCompatActivity() {
 
         queue.add(req)
         queue.start()
+    }
+
+    private fun getImage(sentBy: String): Bitmap {
+        var imgB64: String = "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" // default img
+
+        var url = "https://glennolsson.se/intnet/profile/" + sentBy
+        val queue = Volley.newRequestQueue(this)
+
+        val req = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            Response.Listener<JSONObject> { response ->
+                imgB64 = response.getString("picture")
+            },
+            Response.ErrorListener { error ->
+                txtDebug.text = error.message
+            })
+        Toast.makeText(this, imgB64, Toast.LENGTH_LONG).show()
+        queue.add(req)
+        queue.start()
+
+        val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
+        val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
+        return decodedByte
     }
 }

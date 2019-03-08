@@ -2,12 +2,19 @@ package com.example.intproject
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.support.v4.content.ContextCompat.startActivity
 import android.util.AttributeSet
+import android.util.Base64
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import kotlinx.android.synthetic.main.room_view.view.*
+import org.json.JSONObject
 
 //import kotlinx.android.synthetic.main.message_view.view.*
 
@@ -18,7 +25,7 @@ class MessageView : LinearLayout {
     constructor(context: Context, sentBy: String, message: String) : super(context) {
         inflate(context, R.layout.message_view, this)
 
-        val imgProfilePic: ImageView = findViewById(R.id.imgProfilePic)
+
         val txtMessage: TextView = findViewById(R.id.txtMessage)
         /*
         imgProfilePic.setOnClickListener {
@@ -28,6 +35,8 @@ class MessageView : LinearLayout {
             intent.putExtra("username", username)
             startActivity(intent)
         }*/
+
+
 
         txtMessage.text = message
     }
@@ -44,5 +53,10 @@ class MessageView : LinearLayout {
 
             attributes.recycle()
         }
+    }
+
+    fun setImage(image: Bitmap) {
+        val imgProfilePic: ImageView = findViewById(R.id.imgProfilePic)
+        imgProfilePic.setImageBitmap(image)
     }
 }
