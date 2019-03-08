@@ -178,8 +178,17 @@ router.post("/comment/:username", (req, res) => {
             date: date
         }).then(() => {
             res.json({success: true})
-        })
-    })
+        });
+
+        let previewText = comment;
+        if(comment.length > 15){
+            previewText = previewText.substring(0, 15) + "...";
+        }
+
+        let notificationMessage = userfrom + " just left a commented on your profile: \”" + previewText + "\"";
+        models.sendNotification(notificationMessage, commentOn);
+
+    });
 });
 
 router.post("/friend/:username", (req, res) => {
@@ -236,7 +245,10 @@ router.post("/friend/:username", (req, res) => {
             }
             res.json({
                 success: true
-            })
+            });
+
+            let notificationMessage = userfrom + " just befriended you!";
+            models.sendNotification(notificationMessage, friend);
         });
     });
 });
