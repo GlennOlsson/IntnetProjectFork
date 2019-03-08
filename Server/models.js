@@ -19,8 +19,9 @@ exports.removeClient = (username) => {
 exports.getClientsOfChat = (chatid) => {
     let returnArray = [];
     for(client of clients){
+        console.log("id", chatid, " ", client.getChat())
         if(client.getChat() == chatid){
-            returnArray.push(client.getUsername);
+            returnArray.push(client.getName());
         }
     }
 

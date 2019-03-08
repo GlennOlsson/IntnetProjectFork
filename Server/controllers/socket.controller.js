@@ -48,7 +48,7 @@ function socketController(socket, io){
         socket.chatid = chatid;
         socket.join(chatid, () => {
             io.to(chatid).emit("join", {username: user});
-        });
+		});
     });
 
     socket.on("leave", req => {

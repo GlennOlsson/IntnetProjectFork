@@ -13,7 +13,7 @@ class Client{
         }
 
         this.getChat = () => {
-            return this.chatid;
+            return this.socket.chatid;
         }
     }
 }
