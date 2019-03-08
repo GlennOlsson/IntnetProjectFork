@@ -119,13 +119,22 @@ ____
 ## Socket emits
 These are the requests sent to the server. Specified as socket.emit(...) by client
 
+### init
+Init client connection with username. This must be done before any other socket call
+
+#### Body
+```json
+{
+    "username": "USERNAME (STRING)"
+}
+```
+
 ### join
 A user joins a new chatroom
 #### Body
 ```json
 {
-    "username": "USERNAME (STRING)",
-    "chatid": "CHAT ID (INTEGER)",
+    "chatid": "CHAT ID (INTEGER)"
 }
 ```
 

@@ -12,7 +12,7 @@ app.use("/", router);
 const socketSetup = require('./controllers/socket.controller');
 socketSetup(httpServer);
 
-httpServer.listen(80, () => {
+httpServer.listen(8082, () => {
     console.log("Server running");
 });
 
