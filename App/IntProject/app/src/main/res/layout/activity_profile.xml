@@ -57,7 +57,7 @@
                     android:id="@+id/txtDescription"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    android:text="<beskrivning>"
+                    android:text="Beskrivning"
                     android:textStyle="normal"
                     android:textSize="18dp"
                     android:textColor="@color/colorGrey"

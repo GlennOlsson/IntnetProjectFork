@@ -31,7 +31,7 @@ class Profile : AppCompatActivity() {
 
 
         var url = "https://glennolsson.se/intnet/profile/" + username
-        val queue = Volley.newRequestQueue(this)
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -67,6 +67,5 @@ class Profile : AppCompatActivity() {
             })
 
         queue.add(req)
-        queue.start()
     }
 }

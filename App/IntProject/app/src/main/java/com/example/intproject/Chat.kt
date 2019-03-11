@@ -41,7 +41,7 @@ class Chat : AppCompatActivity() {
         }
 
         var url = "https://glennolsson.se/intnet/room/" + id
-        val queue = Volley.newRequestQueue(this)
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonObjectRequest(
             Request.Method.GET, url, null,
@@ -68,8 +68,7 @@ class Chat : AppCompatActivity() {
                         } else {
                             // ugly
 
-                            var url = "https://glennolsson.se/intnet/profile/" + sentBy
-                            val queue = Volley.newRequestQueue(this)
+                            val url = "https://glennolsson.se/intnet/profile/" + sentBy
 
                             val req = JsonObjectRequest(
                                 Request.Method.GET, url, null,
@@ -84,7 +83,6 @@ class Chat : AppCompatActivity() {
                                     txtDebug.text = error.message
                                 })
                             queue.add(req)
-                            queue.start()
                         }
 
                         msgView.setOnClickListener {
@@ -106,6 +104,5 @@ class Chat : AppCompatActivity() {
             })
 
         queue.add(req)
-        queue.start()
     }
 }

@@ -25,7 +25,7 @@ class Login : AppCompatActivity() {
 
 
             val url = "https://glennolsson.se/intnet/login"
-            val queue = Volley.newRequestQueue(this)
+            val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
             val reqBody = JSONObject()
             reqBody.put("name", edtUsername.text.toString())
             reqBody.put("password", edtPassword.text.toString())
@@ -48,7 +48,6 @@ class Login : AppCompatActivity() {
                 })
 
             queue.add(req)
-            queue.start()
         }
     }
 

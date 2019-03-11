@@ -29,7 +29,7 @@ class Rooms : AppCompatActivity() {
         setContentView(R.layout.activity_rooms)
 
         var url = "https://glennolsson.se/intnet/rooms"
-        val queue = Volley.newRequestQueue(this)
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonArrayRequest(Request.Method.GET, url, null,
             Response.Listener<JSONArray> { response ->
@@ -52,7 +52,6 @@ class Rooms : AppCompatActivity() {
             })
 
         queue.add(req)
-        queue.start()
     }
 
     private fun enterRoom(v: View?) {
