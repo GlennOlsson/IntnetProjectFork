@@ -3,6 +3,7 @@ const Client = require('./models/Client');
 let clients = [];
 
 exports.newClient = (socket) =>  {
+    console.log("New client " + socket.username);
     clients.push(new Client(socket));
 }
 
@@ -30,9 +31,17 @@ exports.getClientsOfChat = (chatid) => {
 
 exports.getClient = (username) => {
     for(client of clients){
+        console.log(client.getName() + ", " + username);
         if(client.getName() == username){
             return client;
         }
     }
 }
 
+exports.sendNotification = (message, username) => {
+    let client = exports.getClient(username);
+    let socket = client.getSocket();
+    socket.emit("notification", {
+        message
+    });
+}

@@ -94,11 +94,11 @@ Befriend someone. The user to befriend is :username
 ```json
 {
     "token": "BEFRIENDER TOKEN(STRING)",
-    "nane": "BEFRIENDER USERNMAE (STRING)"
+    "name": "BEFRIENDER USERNAME (STRING)"
 }
 ```
 
-### /newaccount
+### /newuser
 Create a new account with username and password
 
 #### Request body
