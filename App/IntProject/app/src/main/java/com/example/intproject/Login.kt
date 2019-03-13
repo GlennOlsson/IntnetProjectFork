@@ -26,33 +26,21 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
-        val socketSingleton: SocketSingleton = SocketSingleton()
-        val tag = socketSingleton.tag
-        val socket = socketSingleton.socket
+        //val socketSingleton: SocketSingleton = SocketSingleton()
+        //val socketSingleton: SocketSingleton = SocketSingleton.instance
+        //val socket = socketSingleton.socket
+        val socket = SocketSingleton.getInstance(this.applicationContext).socket
+        val tag = SocketSingleton.getInstance(this.applicationContext).tag
         /*val tag = "Socket::::"
         val socket: Socket = IO.socket("http://130.229.129.92:8082")*/
 
-        socket.on(Socket.EVENT_CONNECT) {
-            Log.i(tag, "Socket connected!")
-        }
 
-        socket.on(Socket.EVENT_DISCONNECT) {
-            Log.i(tag, "Socket disconnected!")
-        }
-        socket.on(Socket.EVENT_ERROR) { error ->
-            Log.i(tag+"err", error[0].toString())
-        }
-        socket.on(Socket.EVENT_CONNECT_ERROR) { error ->
-            Log.i("ConErr"+tag, error[0].toString())
-        }
 
         val jsonEmit = JSONObject()
         jsonEmit.put("username", "oscarekh")
         socket.emit("init", jsonEmit)
 
         btnLogin.setOnClickListener {
-            //val username = edtUsername.text.toString()
-            //val password = edtPassword.text.toString()
 
             val url: String
             val respList: Response.Listener<JSONObject>
