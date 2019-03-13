@@ -16,9 +16,9 @@ function socketController(socket, io){
     socket.on("init", req => {
         console.log("Init: ", req);
         let user = req.username;
+        socket.username = user;
         models.newClient(socket);
 
-        socket.username = user;
     });
 
     socket.on("message", req => {
