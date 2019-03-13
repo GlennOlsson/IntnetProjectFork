@@ -4,11 +4,14 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import io.socket.client.IO
+import io.socket.client.Socket
 import kotlinx.android.synthetic.main.login.*
 import org.json.JSONObject
 import java.lang.Exception
@@ -16,10 +19,37 @@ import java.lang.Exception
 class Login : AppCompatActivity() {
 
     var register: Boolean = false
+    var username: String = ""
+    var password: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
+
+        val socketSingleton = SocketSingleton.getInstance(this.applicationContext)
+        val tag = socketSingleton.tag
+        val socket = socketSingleton.socket
+
+        socket.on(Socket.EVENT_CONNECT) {
+            Log.i(tag, "Socket connected!")
+        }
+
+        socket.on(Socket.EVENT_DISCONNECT) {
+            Log.i(tag, "Socket disconnected!")
+        }
+        socket.on(Socket.EVENT_ERROR) { error ->
+            Log.i(tag, error.toString())
+        }
+        socket.on(Socket.EVENT_CONNECT_ERROR) { error ->
+            Log.i("ConErr"+tag, error[0].toString())
+        }
+
+        //Log.i(tag+"L", socket.toString())
+        socketSingleton.logSocket()
+
+        val jsonEmit = JSONObject()
+        jsonEmit.put("username", "oscarekh")
+        //socket.emit("init", jsonEmit)
 
         btnLogin.setOnClickListener {
             //val username = edtUsername.text.toString()
@@ -45,6 +75,9 @@ class Login : AppCompatActivity() {
                     try {
                         val success = response.getBoolean("success")
                         val token = response.getString("token")
+                        val jsonEmit = JSONObject()
+                        jsonEmit.put("username", username)
+                        socket.emit("init", jsonEmit)
                         login(success)
                     } catch (e : Exception) {
                         login(false)
@@ -54,8 +87,10 @@ class Login : AppCompatActivity() {
 
             val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
             val reqBody = JSONObject()
-            reqBody.put("name", edtUsername.text.toString())
-            reqBody.put("password", edtPassword.text.toString())
+            username = edtUsername.text.toString()
+            password = edtPassword.text.toString()
+            reqBody.put("name", username)
+            reqBody.put("password", password)
 
 
 

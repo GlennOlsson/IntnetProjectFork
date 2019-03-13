@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import io.socket.client.Socket
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_rooms.*
 import org.json.JSONArray
@@ -39,6 +41,15 @@ class Chat : AppCompatActivity() {
         } catch (e: Exception) {
             txtName.text = "Err: " + e.toString()
         }
+
+        val socketSingleton = SocketSingleton.getInstance(this.applicationContext)
+        val tag = socketSingleton.tag
+        val socket = socketSingleton.socket
+
+        val jsonEmit = JSONObject()
+        jsonEmit.put("chatid", id)
+        socket.emit("join", jsonEmit)
+
 
         var url = "https://glennolsson.se/intnet/room/" + id
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
