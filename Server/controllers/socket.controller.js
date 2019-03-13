@@ -15,16 +15,15 @@ function socketController(socket, io){
 
     socket.on("init", req => {
         console.log("Init: ", req);
-        let json = JSON.parse(req);
-        let user = json.username;
+        let user = req.username;
+        socket.username = user;
         models.newClient(socket);
 
-        socket.username = user;
     });
 
     socket.on("message", req => {
         console.log("Message: ", req);
-        let json = JSON.parse(req);
+        let json = req;
         let chat = socket.chatid;
         let user = socket.username;
         let content = json.content;
@@ -41,7 +40,7 @@ function socketController(socket, io){
     });
 
     socket.on("join", req => {
-        let json = JSON.parse(req);
+        let json = req;
         let chatid = json.chatid;
         let user = socket.username;
         console.log("Joined room ", user, chatid);
