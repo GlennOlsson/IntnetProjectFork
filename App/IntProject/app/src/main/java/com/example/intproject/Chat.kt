@@ -42,13 +42,13 @@ class Chat : AppCompatActivity() {
             txtName.text = "Err: " + e.toString()
         }
 
-        val socketSingleton = SocketSingleton.getInstance(this.applicationContext)
-        val tag = socketSingleton.tag
-        val socket = socketSingleton.socket
+        //val socketSingleton = SocketSingleton.getInstance(this.applicationContext)
+        //val tag = socketSingleton.tag
+        //val socket = socketSingleton.socket
 
         val jsonEmit = JSONObject()
         jsonEmit.put("chatid", id)
-        socket.emit("join", jsonEmit)
+        //socket.emit("join", jsonEmit)
 
 
         var url = "https://glennolsson.se/intnet/room/" + id

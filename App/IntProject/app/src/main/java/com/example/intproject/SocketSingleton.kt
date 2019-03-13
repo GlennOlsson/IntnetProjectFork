@@ -10,22 +10,40 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class SocketSingleton constructor(context: Context) /*: Service*/ {
+class SocketSingleton : Application()/*: Service*/ {
 
     val tag = "SocketSingleton"
     /*val socket: Socket by lazy {
         IO.socket("https://glennolsson.se/intnet/socket.io").connect()
     }*/
     //val socket: Socket = IO.socket("https://glennolsson.se/intnet/socket.io")
-    val socket: Socket = IO.socket("https://socket-io-chat.now.sh/")
+    val socket: Socket = IO.socket("http://130.229.129.92:8082/socket.io")
 
 
     init {
-        //socket.setDe
+        instance = this
         socket.connect()
-        //createSocket("https://glennolsson.se/intnet")
     }
 
+    companion object {
+        private var instance: SocketSingleton? = null
+
+        fun applicationContext() : SocketSingleton {
+            return instance as SocketSingleton
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+    }
+    /*
+    init {
+        //socket.setDe
+        //socket.connect()
+        //createSocket("https://glennolsson.se/intnet")
+    }
+*/
+/*
     companion object {
         @Volatile
         private var INSTANCE: SocketSingleton? = null
@@ -36,7 +54,7 @@ class SocketSingleton constructor(context: Context) /*: Service*/ {
                 }
             }
     }
-
+*/
     fun logSocket() {
         Log.i(tag, socket.connect().toString())
     }
