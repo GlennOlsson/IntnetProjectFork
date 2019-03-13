@@ -16,8 +16,8 @@ class SocketSingleton : Application()/*: Service*/ {
     /*val socket: Socket by lazy {
         IO.socket("https://glennolsson.se/intnet/socket.io").connect()
     }*/
-    //val socket: Socket = IO.socket("https://glennolsson.se/intnet/socket.io")
-    val socket: Socket = IO.socket("http://130.229.129.92:8082/socket.io")
+    val socket: Socket = IO.socket("http://glennolsson.se:8082")
+    //val socket: Socket = IO.socket("http://130.229.129.92:8082/socket.io")
 
 
     init {
