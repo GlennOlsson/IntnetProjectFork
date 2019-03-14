@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -54,7 +55,7 @@ class Profile : AppCompatActivity() {
                     val comments: JSONArray = response.getJSONArray("comments")
 
                     txtProfileName.text = username
-                    txtDescription.text = bio
+                    txtDescription.setText(bio)
                     val decodedString: ByteArray = Base64.decode(pictureB64, Base64.DEFAULT)
                     val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
                     imgProfilePic.setImageBitmap(decodedByte)
@@ -89,7 +90,7 @@ class Profile : AppCompatActivity() {
                         linComments.addView(commentView)
                     }
                 } catch (e : Exception) {
-                    txtDescription.text = "OnCreate: " + e.toString()
+                    txtDescription.setText("OnCreate: " + e.toString())
                 }
             },
             Response.ErrorListener { error ->
@@ -143,9 +144,19 @@ class Profile : AppCompatActivity() {
         btnFloating.setOnClickListener() {
             if (loggedIn == username) {
                 if (editing) {
-                    // save edits
+                    editing = !editing
+
+                    // send edits
+
+                    txtDescription.isEnabled = false
+                    txtDescription.inputType = InputType.TYPE_NULL
                 } else {
-                    // start editing profile
+                    editing = !editing
+
+                    // signal that editing mode is active
+
+                    txtDescription.isEnabled = true
+                    txtDescription.inputType = InputType.TYPE_CLASS_TEXT
                 }
             } else {
                 val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
