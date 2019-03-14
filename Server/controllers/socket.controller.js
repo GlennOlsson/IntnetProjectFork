@@ -27,7 +27,7 @@ function socketController(socket, io){
         let chat = socket.chatid;
         let user = socket.username;
         let content = json.content;
-	content.username = user;
+	json.username = user;
         io.to(chat).emit("message", json);
 
         let date = ORMModels.getCurrentTime();
