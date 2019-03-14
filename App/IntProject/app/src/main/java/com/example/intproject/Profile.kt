@@ -49,13 +49,25 @@ class Profile : AppCompatActivity() {
                     val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
                     imgProfilePic.setImageBitmap(decodedByte)
 
+                    for (i in 0..friends.length()-1) {
+                        val friendName = friends.getString(i)
+
+                        val friendView = FriendView(this, friendName)
+                        friendView.setOnClickListener {
+                            val intent = Intent(this, Profile::class.java)
+                            intent.putExtra("username", friendName)
+                            startActivity(intent)
+                        }
+                        linFriends.addView(friendView)
+                    }
+
                     for (i in 0..comments.length()-1) {
                         val comment = comments.getJSONObject(i)
                         val by = comment.getString("by")
                         val content = comment.getString("comment")
                         val date = comment.getString("date")
 
-                        val msgView= MessageView(this, by, content)
+                        val msgView = MessageView(this, by, content)
                         linComments.addView(msgView)
                     }
                 } catch (e : Exception) {
