@@ -12,6 +12,7 @@ exports.removeClient = (username) => {
         let client = clients[clientIndex];
         if(client.getName() == username){
             clients.splice(clientIndex, 1);
+            console.log("Removing client " + username);
             break;
         }
     }
