@@ -149,7 +149,7 @@ class Chat : AppCompatActivity() {
                     userCache.put(sentBy, decodedByte)
                 },
                 Response.ErrorListener { error ->
-                    txtDebug.text = error.message
+                    //txtDebug.text = error.message
                 })
             queue.add(req)
         }
