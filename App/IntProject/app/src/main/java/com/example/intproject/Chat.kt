@@ -79,7 +79,7 @@ class Chat : AppCompatActivity() {
             try {
                 val sentBy = resJson.getString("username")
                 val msg = resJson.getString("content")
-                runOnUiThread { addMessageView(msg, sentBy) }
+                runOnUiThread { addMessageView(msg, sentBy, "Alldeles nyss!") }
                 //addMessageView(msg, sentBy)
             } catch (e: Exception) {
 
@@ -102,9 +102,9 @@ class Chat : AppCompatActivity() {
 
                         val msg = message.getString("message")
                         val sentBy = message.getString("sentby")
-                        //val sent = room.getInt("sent")
+                        val sent = message.getString("sent")
 
-                        addMessageView(msg, sentBy)
+                        addMessageView(msg, sentBy, sent)
                     }
                 } catch (e : Exception) {
                     txtDebug.text = "OnCreate: " + e.toString()
@@ -120,14 +120,15 @@ class Chat : AppCompatActivity() {
             val jsonEmit = JSONObject()
             jsonEmit.put("content", edtMessage.text)
             socket.emit("message", jsonEmit)
+            edtMessage.setText("")
         }
     }
 
     private fun updateCount() {
         txtCount.text = "Online: " + count
     }
-    private fun addMessageView(msg: String, sentBy: String) {
-        val msgView: MessageView = MessageView(this, sentBy, msg)
+    private fun addMessageView(msg: String, sentBy: String, sentDate: String) {
+        val msgView: MessageView = MessageView(this, sentBy, msg, sentDate)
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val u = userCache.get(sentBy)

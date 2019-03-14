@@ -80,7 +80,7 @@ class Profile : AppCompatActivity() {
                         val content = comment.getString("comment")
                         val date = comment.getString("date")
 
-                        val commentView = CommentView(this, content)
+                        val commentView = CommentView(this, content, by, date)
                         setUserImage(commentView, by)
                         commentView.setOnClickListener {
                             val intent = Intent(this, Profile::class.java)
@@ -123,7 +123,7 @@ class Profile : AppCompatActivity() {
 
 
                     if (success) {
-                        val commentView = CommentView(this, comment)
+                        val commentView = CommentView(this, comment, loggedIn.toString(), "Alldeles nyss!")
                         setUserImage(commentView, loggedIn.toString())
                         commentView.setOnClickListener {
                             val intent = Intent(this, Profile::class.java)
@@ -139,6 +139,7 @@ class Profile : AppCompatActivity() {
                     //txtDebug.text = error.message
                 })
             queue.add(req)
+            edtComment.setText("")
         }
 
         btnFloating.setOnClickListener() {

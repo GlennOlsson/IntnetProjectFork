@@ -9,12 +9,14 @@ import android.widget.TextView
 
 class CommentView : LinearLayout {
 
-    constructor(context: Context, message: String) : super(context) {
+    constructor(context: Context, message: String, sentBy: String, sentDate: String) : super(context) {
         LinearLayout.inflate(context, R.layout.comment_view, this)
 
 
         val txtCommentMessage: TextView = findViewById(R.id.txtCommentMessage)
+        val txtCommentInfo: TextView = findViewById(R.id.txtCommentInfo)
         txtCommentMessage.text = message
+        txtCommentInfo.text = sentBy + ", " + sentDate
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {

@@ -22,23 +22,15 @@ class MessageView : LinearLayout {
 
     // Should add dynamic placing of image/message depending on who sent the message
     // current user->msg to right, other user->msg to left
-    constructor(context: Context, sentBy: String, message: String) : super(context) {
+    constructor(context: Context, sentBy: String, message: String, sentDate: String) : super(context) {
         inflate(context, R.layout.message_view, this)
 
 
         val txtMessage: TextView = findViewById(R.id.txtMessage)
-        /*
-        imgProfilePic.setOnClickListener {
-            val username: String = sentBy
-
-            val intent = Intent(this, Chat::class.java)
-            intent.putExtra("username", username)
-            startActivity(intent)
-        }*/
-
-
+        val txtMessageInfo: TextView = findViewById(R.id.txtMessageInfo)
 
         txtMessage.text = message
+        txtMessageInfo.text = sentBy + ", " + sentDate
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
