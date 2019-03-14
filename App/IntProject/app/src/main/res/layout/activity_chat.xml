@@ -8,7 +8,8 @@
         android:fillViewport="true"
         tools:context=".Chat"
         android:background="@color/colorBg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusableInTouchMode="true">
 
     <ScrollView
             android:id="@+id/scrMessages"
