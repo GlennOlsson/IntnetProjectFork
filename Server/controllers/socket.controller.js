@@ -68,6 +68,7 @@ function socketController(socket, io){
         console.log("Disconnect", req);
         let user = socket.username;
         let chatid = socket.chatid;
+        socket.chatid = undefined;
         io.to(chatid).emit("leave", {
             username: user,
             reason: "Timed out"
