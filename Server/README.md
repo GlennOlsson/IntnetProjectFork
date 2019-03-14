@@ -98,6 +98,18 @@ Befriend someone. The user to befriend is :username
 }
 ```
 
+### /bio
+Edit the bio
+
+#### Request body
+```json
+{
+    "token": "EDITOR TOKEN(STRING)",
+    "name": "EDITOR USERNAME (STRING)",
+    "bio": "BIO CONTENT (STRING)"
+}
+```
+
 ### /newuser
 Create a new account with username and password
 

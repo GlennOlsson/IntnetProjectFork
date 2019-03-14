@@ -282,6 +282,14 @@ router.post("/newuser", (req, res) => {
                 });
                 return;
             }
+            let time = ORMModels.getCurrentTime();
+            console.log("Time: ", time);
+            ORMModels.Profile.create({
+                user: name,
+                bio: "I am an uninteresting person without a bio",
+                date_created: time,
+                profilepic: null
+            })
             res.json({
                 success: true
             })

@@ -330,8 +330,8 @@ function padd(num){
 function getCurrentTime(){
     let now = new Date();
     let YY = padd(now.getFullYear())
-    let MM = padd(now.getMonth());
-    let DD = padd(now.getDay());
+    let MM = padd(now.getMonth() + 1);
+    let DD = padd(now.getDate());
     let HH = padd(now.getHours());
     let mm = padd(now.getMinutes());
     let date = YY + "-" + MM + "-" + DD  + ";" + HH + ":" + mm;
