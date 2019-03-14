@@ -67,8 +67,13 @@ class Profile : AppCompatActivity() {
                         val content = comment.getString("comment")
                         val date = comment.getString("date")
 
-                        val msgView = MessageView(this, by, content)
-                        linComments.addView(msgView)
+                        val commentView = CommentView(this, content)
+                        commentView.setOnClickListener {
+                            val intent = Intent(this, Profile::class.java)
+                            intent.putExtra("username", by)
+                            startActivity(intent)
+                        }
+                        linComments.addView(commentView)
                     }
                 } catch (e : Exception) {
                     txtDescription.text = "OnCreate: " + e.toString()
