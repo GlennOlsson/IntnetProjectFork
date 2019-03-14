@@ -55,21 +55,24 @@ class Chat : AppCompatActivity() {
 
         socket.on("join") {
             count++
-            updateCount()
+            runOnUiThread { updateCount() }
+            //updateCount()
         }
 
         socket.on("leave") {
             count--
-            updateCount()
+            runOnUiThread { updateCount() }
+            //updateCount()
         }
 
         socket.on("message") {res ->
             val resJson: JSONObject = res[0] as JSONObject
-
+            Log.i("Socket", resJson.toString())
             try {
                 val sentBy = resJson.getString("username")
                 val msg = resJson.getString("content")
-                addMessageView(msg, sentBy)
+                runOnUiThread { addMessageView(msg, sentBy) }
+                //addMessageView(msg, sentBy)
             } catch (e: Exception) {
 
             }
