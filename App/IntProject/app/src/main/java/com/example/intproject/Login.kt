@@ -21,20 +21,14 @@ class Login : AppCompatActivity() {
     var register: Boolean = false
     var username: String = ""
     var password: String = ""
+    var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
-        //val socketSingleton: SocketSingleton = SocketSingleton()
-        //val socketSingleton: SocketSingleton = SocketSingleton.instance
-        //val socket = socketSingleton.socket
         val socket = SocketSingleton.getInstance(this.applicationContext).socket
         val tag = SocketSingleton.getInstance(this.applicationContext).tag
-        /*val tag = "Socket::::"
-        val socket: Socket = IO.socket("http://130.229.129.92:8082")*/
-
-
 
         val jsonEmit = JSONObject()
         jsonEmit.put("username", "oscarekh")
@@ -61,10 +55,12 @@ class Login : AppCompatActivity() {
                 respList = Response.Listener<JSONObject> { response ->
                     try {
                         val success = response.getBoolean("success")
-                        val token = response.getString("token")
+                        token = response.getString("token")
+
                         val jsonEmit = JSONObject()
                         jsonEmit.put("username", username)
                         socket.emit("init", jsonEmit)
+
                         login(success)
                     } catch (e : Exception) {
                         login(false)
@@ -113,6 +109,8 @@ class Login : AppCompatActivity() {
 
     fun login(success: Boolean) {
         if (success) {
+            Constants.loggedIn = username
+            Constants.token = token
             val intent = Intent(this, Rooms::class.java)
             startActivity(intent)
         } else {

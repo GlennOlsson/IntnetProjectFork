@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import com.android.volley.Request
 import com.android.volley.Response
@@ -19,13 +20,19 @@ import java.util.*
 
 class Profile : AppCompatActivity() {
 
-    var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
+    private var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
+    private var editing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        var loggedIn = Constants.loggedIn
+        var token = Constants.token
         var username: String = ""
+
+        Log.i("Profile", loggedIn + " " + token)
+
         try {
             username = intent.getStringExtra("username")
         } catch (e: Exception) {
@@ -90,6 +97,81 @@ class Profile : AppCompatActivity() {
             })
 
         queue.add(req)
+
+        btnComment.setOnClickListener() {
+            val comment = edtComment.text.toString()
+
+            val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+
+            val url = "https://glennolsson.se/intnet/comment/" + username
+
+            val reqBody = JSONObject()
+            reqBody.put("token", token)
+            reqBody.put("name", loggedIn)
+            reqBody.put("comment", comment)
+
+            val req = JsonObjectRequest(
+                Request.Method.POST, url, reqBody,
+                Response.Listener<JSONObject> { response ->
+                    try {
+                        val reason = response.getString("reason")
+                    } catch (e: Exception) {
+
+                    }
+                    val success = response.getBoolean("success")
+
+
+                    if (success) {
+                        val commentView = CommentView(this, comment)
+                        setUserImage(commentView, loggedIn.toString())
+                        commentView.setOnClickListener {
+                            val intent = Intent(this, Profile::class.java)
+                            intent.putExtra("username", loggedIn.toString())
+                            startActivity(intent)
+                        }
+                        linComments.addView(commentView)
+                    } else {
+                        Log.i("Profile", "no can do")
+                    }
+                },
+                Response.ErrorListener { error ->
+                    //txtDebug.text = error.message
+                })
+            queue.add(req)
+        }
+
+        btnFloating.setOnClickListener() {
+            if (loggedIn == username) {
+                if (editing) {
+                    // save edits
+                } else {
+                    // start editing profile
+                }
+            } else {
+                val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+
+                val url = "https://glennolsson.se/intnet/friend/" + username
+
+                val reqBody = JSONObject()
+                reqBody.put("token", token)
+                reqBody.put("name", loggedIn)
+
+                val req = JsonObjectRequest(
+                    Request.Method.POST, url, reqBody,
+                    Response.Listener<JSONObject> { response ->
+                        val success = response.getBoolean("success")
+                        if (success) {
+                            // alert
+                        } else {
+                            val reason = response.getString("reason")
+                        }
+                    },
+                    Response.ErrorListener { error ->
+                        //txtDebug.text = error.message
+                    })
+                queue.add(req)
+            }
+        }
     }
 
     private fun setUserImage(v: CommentView, username: String) {

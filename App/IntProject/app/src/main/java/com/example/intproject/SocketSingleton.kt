@@ -32,7 +32,17 @@ class SocketSingleton {
         socket.on(Socket.EVENT_CONNECT_ERROR) { error ->
             Log.i(tag, "Event Connect Error: " + error[0].toString())
         }
+        socket.on(Socket.EVENT_CONNECTING) {
+            Log.i(tag, "Socket connectING!")
+        }
+        socket.on(Socket.EVENT_CONNECT_TIMEOUT) {
+            Log.i(tag, "Socket connection timed out!")
+        }
+        socket.on(Socket.EVENT_MESSAGE) {
+            Log.i(tag, "Socket message!")
+        }
         socket.on("notification") { res ->
+            Log.i(tag, "Det funkar kanske?? " + res[0].toString())
             val resJson: JSONObject = res[0] as JSONObject
             val title = "Pling Plong"
             val content = resJson.getString("message")

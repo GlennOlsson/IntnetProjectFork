@@ -65,6 +65,14 @@ class Chat : AppCompatActivity() {
             //updateCount()
         }
 
+        socket.on("notification") { res ->
+            Log.i(tag, "Det funkar kanske?? " + res[0].toString())
+            val resJson: JSONObject = res[0] as JSONObject
+            val title = "Pling Plong"
+            val content = resJson.getString("message")
+            //notificationSingleton.sendNotification(title, content)
+        }
+
         socket.on("message") {res ->
             val resJson: JSONObject = res[0] as JSONObject
             Log.i("Socket", resJson.toString())
