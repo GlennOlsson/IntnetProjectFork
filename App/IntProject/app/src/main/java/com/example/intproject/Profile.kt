@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
+import android.view.View
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -17,6 +18,8 @@ import java.lang.Exception
 import java.util.*
 
 class Profile : AppCompatActivity() {
+
+    var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,8 @@ class Profile : AppCompatActivity() {
                         val friendName = friends.getString(i)
 
                         val friendView = FriendView(this, friendName)
+                        setUserImage(friendView, friendName)
+
                         friendView.setOnClickListener {
                             val intent = Intent(this, Profile::class.java)
                             intent.putExtra("username", friendName)
@@ -68,6 +73,7 @@ class Profile : AppCompatActivity() {
                         val date = comment.getString("date")
 
                         val commentView = CommentView(this, content)
+                        setUserImage(commentView, by)
                         commentView.setOnClickListener {
                             val intent = Intent(this, Profile::class.java)
                             intent.putExtra("username", by)
@@ -84,5 +90,55 @@ class Profile : AppCompatActivity() {
             })
 
         queue.add(req)
+    }
+
+    private fun setUserImage(v: CommentView, username: String) {
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+
+        val u = userCache.get(username)
+        if (u != null) {
+            v.setImage(u)
+        } else {
+            val url = "https://glennolsson.se/intnet/profile/" + username
+
+            val req = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                Response.Listener<JSONObject> { response ->
+                    val imgB64: String = response.getString("picture")
+                    val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
+                    val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
+                    v.setImage(decodedByte)
+                    userCache.put(username, decodedByte)
+                },
+                Response.ErrorListener { error ->
+                    //txtDebug.text = error.message
+                })
+            queue.add(req)
+        }
+    }
+
+    private fun setUserImage(v: FriendView, username: String) {
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+
+        val u = userCache.get(username)
+        if (u != null) {
+            v.setImage(u)
+        } else {
+            val url = "https://glennolsson.se/intnet/profile/" + username
+
+            val req = JsonObjectRequest(
+                Request.Method.GET, url, null,
+                Response.Listener<JSONObject> { response ->
+                    val imgB64: String = response.getString("picture")
+                    val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
+                    val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
+                    v.setImage(decodedByte)
+                    userCache.put(username, decodedByte)
+                },
+                Response.ErrorListener { error ->
+                    //txtDebug.text = error.message
+                })
+            queue.add(req)
+        }
     }
 }
