@@ -99,7 +99,7 @@ Befriend someone. The user to befriend is :username
 ```
 
 ### /bio
-Edit the bio
+Change the current bio
 
 #### Request body
 ```json

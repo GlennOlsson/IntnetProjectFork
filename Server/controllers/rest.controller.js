@@ -253,6 +253,41 @@ router.post("/friend/:username", (req, res) => {
     });
 });
 
+router.post("/bio", (req, res) => {
+    let json = req.body;
+    let token = json.token;
+    let username = json.name;
+    let bio = json.bio;
+    ORMModels.AccountTokens.findOne({
+        where: {
+            token: token,
+            user: username
+        }
+    }).then(result => {
+        if(! result){
+            res.json({
+                success: false,
+                reason: 'No account matched token and username'
+            });
+            return;
+        }
+        ORMModels.Profile.findOne({
+            where: {
+                user: username
+            }
+        }).then(profile => {
+            if(profile){
+                profile.update({
+                    bio: bio
+                });
+            }
+            res.json({
+                success: true
+            })
+        })
+    });
+});
+
 router.post("/newuser", (req, res) => {
     let json = req.body;
     let name = json.name;
