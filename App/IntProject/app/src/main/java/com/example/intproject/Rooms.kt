@@ -28,7 +28,7 @@ class Rooms : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rooms)
 
-        var url = "https://glennolsson.se/intnet/rooms"
+        var url = Constants.urlHttp + "/rooms"
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonArrayRequest(Request.Method.GET, url, null,

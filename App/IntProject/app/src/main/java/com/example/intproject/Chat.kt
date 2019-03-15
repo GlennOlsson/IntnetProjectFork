@@ -92,7 +92,7 @@ class Chat : AppCompatActivity() {
 
 
 
-        var url = "https://glennolsson.se/intnet/room/" + id
+        var url = Constants.urlHttp + "/room/" + id
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonObjectRequest(
@@ -157,7 +157,7 @@ class Chat : AppCompatActivity() {
         } else {
             // ugly
 
-            val url = "https://glennolsson.se/intnet/profile/" + sentBy
+            val url = Constants.urlHttp + "/profile/" + sentBy
 
             val req = JsonObjectRequest(
                 Request.Method.GET, url, null,

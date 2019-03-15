@@ -42,7 +42,7 @@ class Profile : AppCompatActivity() {
         }
 
 
-        var url = "https://glennolsson.se/intnet/profile/" + username
+        var url = Constants.urlHttp + "/profile/" + username
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val req = JsonObjectRequest(
@@ -105,7 +105,7 @@ class Profile : AppCompatActivity() {
 
             val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
-            val url = "https://glennolsson.se/intnet/comment/" + username
+            val url = Constants.urlHttp + "/comment/" + username
 
             val reqBody = JSONObject()
             reqBody.put("token", token)
@@ -151,7 +151,7 @@ class Profile : AppCompatActivity() {
                     // send edits
                     val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
-                    val url = "https://glennolsson.se/intnet/bio"
+                    val url = Constants.urlHttp + "/bio"
 
                     val reqBody = JSONObject()
                     reqBody.put("token", token)
@@ -187,7 +187,7 @@ class Profile : AppCompatActivity() {
             } else {
                 val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
-                val url = "https://glennolsson.se/intnet/friend/" + username
+                val url = Constants.urlHttp + "/friend/" + username
 
                 val reqBody = JSONObject()
                 reqBody.put("token", token)
@@ -219,7 +219,7 @@ class Profile : AppCompatActivity() {
         if (u != null) {
             v.setImage(u)
         } else {
-            val url = "https://glennolsson.se/intnet/profile/" + username
+            val url = Constants.urlHttp + "/profile/" + username
 
             val req = JsonObjectRequest(
                 Request.Method.GET, url, null,
@@ -244,7 +244,7 @@ class Profile : AppCompatActivity() {
         if (u != null) {
             v.setImage(u)
         } else {
-            val url = "https://glennolsson.se/intnet/profile/" + username
+            val url = Constants.urlHttp + "/profile/" + username
 
             val req = JsonObjectRequest(
                 Request.Method.GET, url, null,

@@ -40,7 +40,7 @@ class Login : AppCompatActivity() {
             val respList: Response.Listener<JSONObject>
 
             if (register) {
-                url = "https://glennolsson.se/intnet/newuser"
+                url = Constants.urlHttp + "/newuser"
                 respList = Response.Listener<JSONObject> { response ->
                     try {
                         val success = response.getBoolean("success")
@@ -51,7 +51,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             } else {
-                url = "https://glennolsson.se/intnet/login"
+                url = Constants.urlHttp + "/login"
                 respList = Response.Listener<JSONObject> { response ->
                     try {
                         val success = response.getBoolean("success")
@@ -94,7 +94,7 @@ class Login : AppCompatActivity() {
 
     fun switchMode() {
         register = !register
-        txtDebug.text = register.toString()
+        //txtDebug.text = register.toString()
         val l = "LOGIN"
         val r = "REGISTER USER"
 

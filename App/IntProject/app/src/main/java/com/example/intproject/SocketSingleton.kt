@@ -64,7 +64,7 @@ class SocketSingleton {
 
     val tag = "SocketSingleton"
     val socket: Socket by lazy {
-        IO.socket("http://glennolsson.se:8082")
+        IO.socket(Constants.urlSocket)
     }
 
     private fun sendNotification() {
