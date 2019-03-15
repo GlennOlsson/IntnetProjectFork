@@ -25,10 +25,7 @@ router.get("/rooms", (req, res) => {
         });
         res.json(returnRooms);
     })
-})
-
-
-console.log("HERE BOII")
+});
 
 router.get("/room/:id", (req, res) => {
     let returnMessages = []
