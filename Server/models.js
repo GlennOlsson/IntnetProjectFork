@@ -27,6 +27,8 @@ exports.getClientsOfChat = (chatid) => {
         }
     }
 
+    console.log("clients in: ", returnArray);
+
     return returnArray;
 }
 
