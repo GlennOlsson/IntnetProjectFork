@@ -22,7 +22,7 @@ import java.util.*
 
 class Profile : AppCompatActivity() {
 
-    private var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
+    private var userCache: HashMap<String, Bitmap> = HashMap()
     private var editing: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,16 +31,7 @@ class Profile : AppCompatActivity() {
 
         var loggedIn = Constants.loggedIn
         var token = Constants.token
-        var username: String = ""
-
-        Log.i("Profile", loggedIn + " " + token)
-
-        try {
-            username = intent.getStringExtra("username")
-        } catch (e: Exception) {
-            //txtName.text = "Err: " + e.toString()
-        }
-
+        var username = intent.getStringExtra("username")
 
         var url = Constants.urlHttp + "/profile/" + username
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
@@ -50,29 +41,22 @@ class Profile : AppCompatActivity() {
             Response.Listener<JSONObject> { response ->
                 try {
                     val created: String = response.getString("created")
-                    var pictureB64: String = response.getString("picture")
+                    var imgB64: String = response.getString("picture")
                     val bio: String = response.getString("bio")
                     val friends: JSONArray = response.getJSONArray("friends")
                     val comments: JSONArray = response.getJSONArray("comments")
 
                     txtProfileName.text = username
                     txtDescription.setText(bio)
-                    val decodedString: ByteArray = Base64.decode(pictureB64, Base64.DEFAULT)
-                    val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
-                    imgProfilePic.setImageBitmap(decodedByte)
+
+                    val image = b64ToBitmap(imgB64)
+                    imgProfilePic.setImageBitmap(image)
+                    userCache.put(username, image)
 
                     for (i in 0..friends.length()-1) {
                         val friendName = friends.getString(i)
 
-                        val friendView = FriendView(this, friendName)
-                        setUserImage(friendView, friendName)
-
-                        friendView.setOnClickListener {
-                            val intent = Intent(this, Profile::class.java)
-                            intent.putExtra("username", friendName)
-                            startActivity(intent)
-                        }
-                        linFriends.addView(friendView)
+                        addFriendView(friendName)
                     }
 
                     for (i in 0..comments.length()-1) {
@@ -81,21 +65,14 @@ class Profile : AppCompatActivity() {
                         val content = comment.getString("comment")
                         val date = comment.getString("date")
 
-                        val commentView = CommentView(this, content, by, date)
-                        setUserImage(commentView, by)
-                        commentView.setOnClickListener {
-                            val intent = Intent(this, Profile::class.java)
-                            intent.putExtra("username", by)
-                            startActivity(intent)
-                        }
-                        linComments.addView(commentView)
+                        addCommentView(content, by, date)
                     }
                 } catch (e : Exception) {
                     txtDescription.setText("OnCreate: " + e.toString())
                 }
             },
             Response.ErrorListener { error ->
-                //txtDebug.text = error.message
+                Log.i("Profile", error.toString())
             })
 
         queue.add(req)
@@ -104,7 +81,6 @@ class Profile : AppCompatActivity() {
             val comment = edtComment.text.toString()
 
             val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
-
             val url = Constants.urlHttp + "/comment/" + username
 
             val reqBody = JSONObject()
@@ -115,29 +91,17 @@ class Profile : AppCompatActivity() {
             val req = JsonObjectRequest(
                 Request.Method.POST, url, reqBody,
                 Response.Listener<JSONObject> { response ->
-                    try {
-                        val reason = response.getString("reason")
-                    } catch (e: Exception) {
-
-                    }
                     val success = response.getBoolean("success")
 
-
-                    if (success) {
-                        val commentView = CommentView(this, comment, loggedIn.toString(), "Alldeles nyss!")
-                        setUserImage(commentView, loggedIn.toString())
-                        commentView.setOnClickListener {
-                            val intent = Intent(this, Profile::class.java)
-                            intent.putExtra("username", loggedIn.toString())
-                            startActivity(intent)
-                        }
-                        linComments.addView(commentView)
+                    if (!success) {
+                        val reason = response.getString("reason")
+                        toastResponse(success, reason)
                     } else {
-                        Log.i("Profile", "no can do")
+                        addCommentView(comment, loggedIn.toString(), "Alldeles nyss!")
                     }
                 },
                 Response.ErrorListener { error ->
-                    //txtDebug.text = error.message
+                    Log.i("Profile", error.toString())
                 })
             queue.add(req)
             edtComment.setText("")
@@ -148,68 +112,81 @@ class Profile : AppCompatActivity() {
                 if (editing) {
                     editing = !editing
 
-                    // send edits
-                    val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
-
-                    val url = Constants.urlHttp + "/bio"
-
                     val reqBody = JSONObject()
                     reqBody.put("token", token)
                     reqBody.put("name", loggedIn)
                     reqBody.put("bio", txtDescription.text.toString())
 
-                    val req = JsonObjectRequest(
-                        Request.Method.POST, url, reqBody,
-                        Response.Listener<JSONObject> { response ->
-                            val success = response.getBoolean("success")
-                            var reason = "Bio changed!"
-                            if (!success) {
-                                reason = response.getString("reason")
-                            }
-
-                            toastResponse(success, reason)
-                        },
-                        Response.ErrorListener { error ->
-                            //txtDebug.text = error.message
-                        })
-                    queue.add(req)
+                    postRequest("/bio", reqBody, "Bio changed!")
 
                     txtDescription.isEnabled = false
                     txtDescription.inputType = InputType.TYPE_NULL
                 } else {
                     editing = !editing
 
-                    // signal that editing mode is active
+                    Toast.makeText(this, "Edit your description and save by pressing the button again", Toast.LENGTH_SHORT).show()
 
                     txtDescription.isEnabled = true
                     txtDescription.inputType = InputType.TYPE_CLASS_TEXT
                 }
             } else {
-                val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
-
-                val url = Constants.urlHttp + "/friend/" + username
-
                 val reqBody = JSONObject()
                 reqBody.put("token", token)
                 reqBody.put("name", loggedIn)
 
-                val req = JsonObjectRequest(
-                    Request.Method.POST, url, reqBody,
-                    Response.Listener<JSONObject> { response ->
-                        val success = response.getBoolean("success")
-                        var reason = "Friend added!"
-                        if (!success) {
-                            reason = response.getString("reason")
-                        }
-
-                        toastResponse(success, reason)
-                    },
-                    Response.ErrorListener { error ->
-                        //txtDebug.text = error.message
-                    })
-                queue.add(req)
+                postRequest("/friend/"+username, reqBody, "Friend added!")
             }
         }
+    }
+
+    private fun addFriendView(name: String) {
+        val friendView = FriendView(this, name)
+
+        setUserImage(friendView, name)
+
+        friendView.setOnClickListener {
+            val intent = Intent(this, Profile::class.java)
+            intent.putExtra("username", name)
+            startActivity(intent)
+        }
+
+        linFriends.addView(friendView)
+    }
+
+    private fun addCommentView(comment: String, by: String, sentDate: String) {
+        val commentView = CommentView(this, comment, by, sentDate)
+
+        setUserImage(commentView, by)
+
+        commentView.setOnClickListener {
+            val intent = Intent(this, Profile::class.java)
+            intent.putExtra("username", by)
+            startActivity(intent)
+        }
+
+        linComments.addView(commentView)
+    }
+
+    private fun postRequest(url: String, body: JSONObject, defaultReason: String) {
+        val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+        val url = Constants.urlHttp + url
+
+        val req = JsonObjectRequest(
+            Request.Method.POST, url, body,
+            Response.Listener<JSONObject> { response ->
+                val success = response.getBoolean("success")
+                var reason = defaultReason
+
+                if (!success) {
+                    reason = response.getString("reason")
+                }
+
+                toastResponse(success, reason)
+            },
+            Response.ErrorListener { error ->
+                Log.i("Profile", error.toString())
+            })
+        queue.add(req)
     }
 
     private fun setUserImage(v: CommentView, username: String) {
@@ -225,10 +202,9 @@ class Profile : AppCompatActivity() {
                 Request.Method.GET, url, null,
                 Response.Listener<JSONObject> { response ->
                     val imgB64: String = response.getString("picture")
-                    val decodedString: ByteArray = Base64.decode(imgB64, Base64.DEFAULT)
-                    val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
-                    v.setImage(decodedByte)
-                    userCache.put(username, decodedByte)
+                    val image = b64ToBitmap(imgB64)
+                    v.setImage(image)
+                    userCache.put(username, image)
                 },
                 Response.ErrorListener { error ->
                     //txtDebug.text = error.message
@@ -264,11 +240,16 @@ class Profile : AppCompatActivity() {
 
     private fun toastResponse(success: Boolean, reason: String) {
         var status = "Fail"
-
         if (success) {
             status = "Success"
         }
-
         Toast.makeText(this, status + ": " + reason, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun b64ToBitmap(b64: String): Bitmap {
+        val decodedString: ByteArray = Base64.decode(b64, Base64.DEFAULT)
+        val decodedByte: Bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size-1)
+
+        return decodedByte
     }
 }
