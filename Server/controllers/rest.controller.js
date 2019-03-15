@@ -186,7 +186,7 @@ router.post("/comment/:username", (req, res) => {
             previewText = previewText.substring(0, 15) + "...";
         }
 
-        let notificationMessage = userfrom + " just left a commented on your profile: \”" + previewText + "\"";
+        let notificationMessage = userfrom + " just left a comment on your profile: \”" + previewText + "\"";
         console.log("Notification to ", commentOn, ", Message: ", notificationMessage);
         models.sendNotification(notificationMessage, commentOn);
 
