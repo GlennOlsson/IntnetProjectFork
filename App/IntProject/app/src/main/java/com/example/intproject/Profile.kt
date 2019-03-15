@@ -9,6 +9,7 @@ import android.text.InputType
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -148,6 +149,30 @@ class Profile : AppCompatActivity() {
                     editing = !editing
 
                     // send edits
+                    val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
+
+                    val url = "https://glennolsson.se/intnet/bio"
+
+                    val reqBody = JSONObject()
+                    reqBody.put("token", token)
+                    reqBody.put("name", loggedIn)
+                    reqBody.put("bio", txtDescription.text.toString())
+
+                    val req = JsonObjectRequest(
+                        Request.Method.POST, url, reqBody,
+                        Response.Listener<JSONObject> { response ->
+                            val success = response.getBoolean("success")
+                            var reason = "Bio changed!"
+                            if (!success) {
+                                reason = response.getString("reason")
+                            }
+
+                            toastResponse(success, reason)
+                        },
+                        Response.ErrorListener { error ->
+                            //txtDebug.text = error.message
+                        })
+                    queue.add(req)
 
                     txtDescription.isEnabled = false
                     txtDescription.inputType = InputType.TYPE_NULL
@@ -172,11 +197,12 @@ class Profile : AppCompatActivity() {
                     Request.Method.POST, url, reqBody,
                     Response.Listener<JSONObject> { response ->
                         val success = response.getBoolean("success")
-                        if (success) {
-                            // alert
-                        } else {
-                            val reason = response.getString("reason")
+                        var reason = "Friend added!"
+                        if (!success) {
+                            reason = response.getString("reason")
                         }
+
+                        toastResponse(success, reason)
                     },
                     Response.ErrorListener { error ->
                         //txtDebug.text = error.message
@@ -234,5 +260,15 @@ class Profile : AppCompatActivity() {
                 })
             queue.add(req)
         }
+    }
+
+    private fun toastResponse(success: Boolean, reason: String) {
+        var status = "Fail"
+
+        if (success) {
+            status = "Success"
+        }
+
+        Toast.makeText(this, status + ": " + reason, Toast.LENGTH_SHORT).show()
     }
 }
