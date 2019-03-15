@@ -4,6 +4,9 @@ let clients = [];
 
 exports.newClient = (socket) =>  {
     console.log("New client " + socket.username);
+    clients = clients.filter(cli => {
+        return cli.getName() != socket.username
+    });
     clients.push(new Client(socket));
 }
 
