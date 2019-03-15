@@ -322,11 +322,19 @@ function createSample(){
     console.log("Created");
 }
 
-
+/**
+ * Prepend a zero to a number if the number is 1 char long. Usefull to create 
+ * dates like 02-01
+ * @param {number} num the number to padd
+ */
 function padd(num){
     return num.toString().length == 1 ? "0" + num : num;
 }
 
+/**
+ * Get the current time in the format
+ * YYYY-MM-DD;HH:mm
+ */
 function getCurrentTime(){
     let now = new Date();
     let YY = padd(now.getFullYear())

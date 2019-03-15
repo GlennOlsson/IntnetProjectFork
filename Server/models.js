@@ -2,6 +2,9 @@ const Client = require('./models/Client');
 
 let clients = [];
 
+/**
+ * A new client is connected
+ */
 exports.newClient = (socket) =>  {
     console.log("New client " + socket.username);
     clients = clients.filter(cli => {
@@ -10,6 +13,9 @@ exports.newClient = (socket) =>  {
     clients.push(new Client(socket));
 }
 
+/**
+ * A client is disconnected
+ */
 exports.removeClient = (username) => {
     for(clientIndex in clients){
         let client = clients[clientIndex];
@@ -21,6 +27,9 @@ exports.removeClient = (username) => {
     }
 }
 
+/**
+ * The the client names in a chat of a specified chatid
+ */
 exports.getClientsOfChat = (chatid) => {
     let returnArray = [];
     for(client of clients){
@@ -35,6 +44,9 @@ exports.getClientsOfChat = (chatid) => {
     return returnArray;
 }
 
+/**
+ * Get the client object of a username
+ */
 exports.getClient = (username) => {
     for(client of clients){
         console.log(client.getName() + ", " + username);
@@ -44,6 +56,9 @@ exports.getClient = (username) => {
     }
 }
 
+/**
+ * Send notifications to a client
+ */
 exports.sendNotification = (message, username) => {
     let client = exports.getClient(username);
     let socket = client.getSocket();
