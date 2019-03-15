@@ -94,6 +94,7 @@ router.get("/profile/:username", (req, res) => {
                 date: comment.date
             }
         });
+        console.log("Return profile of ", name);
         res.json({
             created,
             picture,
@@ -185,7 +186,8 @@ router.post("/comment/:username", (req, res) => {
             previewText = previewText.substring(0, 15) + "...";
         }
 
-        let notificationMessage = userfrom + " just left a commented on your profile: \”" + previewText + "\"";
+        let notificationMessage = userfrom + " just left a comment on your profile: \”" + previewText + "\"";
+        console.log("Notification to ", commentOn, ", Message: ", notificationMessage);
         models.sendNotification(notificationMessage, commentOn);
 
     });
@@ -248,8 +250,45 @@ router.post("/friend/:username", (req, res) => {
             });
 
             let notificationMessage = userfrom + " just befriended you!";
+            console.log("New friendship from", userfrom, " to ", friend);
             models.sendNotification(notificationMessage, friend);
         });
+    });
+});
+
+router.post("/bio", (req, res) => {
+    let json = req.body;
+    let token = json.token;
+    let username = json.name;
+    let bio = json.bio;
+    ORMModels.AccountTokens.findOne({
+        where: {
+            token: token,
+            user: username
+        }
+    }).then(result => {
+        if(! result){
+            res.json({
+                success: false,
+                reason: 'No account matched token and username'
+            });
+            return;
+        }
+        ORMModels.Profile.findOne({
+            where: {
+                user: username
+            }
+        }).then(profile => {
+            if(profile){
+                profile.update({
+                    bio: bio
+                });
+            }
+            console.log("Updated bio of ", username, " to ", bio);
+            res.json({
+                success: true
+            })
+        })
     });
 });
 
@@ -282,6 +321,14 @@ router.post("/newuser", (req, res) => {
                 });
                 return;
             }
+            let time = ORMModels.getCurrentTime();
+            console.log("Creted new user: ", name);
+            ORMModels.Profile.create({
+                user: name,
+                bio: "I am an uninteresting person without a bio",
+                date_created: time,
+                profilepic: null
+            })
             res.json({
                 success: true
             })
