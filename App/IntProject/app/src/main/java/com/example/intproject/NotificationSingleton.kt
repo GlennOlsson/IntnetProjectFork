@@ -16,10 +16,7 @@ class NotificationSingleton constructor(context: Context) {
     init {
         notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         this.context = context
-        createNotificationChannel(
-            channelId,
-            "Profile Events",
-            "Changes on your profile")
+        createNotificationChannel(channelId, "Profile Events", "Changes on your profile")
     }
 
     companion object {
@@ -56,13 +53,4 @@ class NotificationSingleton constructor(context: Context) {
 
         notificationManager?.notify(notificationId, notification)
     }
-
-    /*
-    val requestQueue: RequestQueue by lazy {
-        Volley.newRequestQueue(context.applicationContext)
-    }
-    fun <T> addToQueue(req: Request<T>) {
-        requestQueue.add(req)
-    }
-    */
 }

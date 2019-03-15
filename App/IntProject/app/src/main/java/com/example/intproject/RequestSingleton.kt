@@ -20,7 +20,4 @@ class RequestSingleton constructor(context: Context) {
     val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(context.applicationContext)
     }
-    fun <T> addToQueue(req: Request<T>) {
-        requestQueue.add(req)
-    }
 }
