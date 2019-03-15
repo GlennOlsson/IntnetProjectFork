@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -49,6 +50,7 @@ class Chat : AppCompatActivity() {
         val socket = SocketSingleton.getInstance(this.applicationContext).socket
         val tag = SocketSingleton.getInstance(this.applicationContext).tag
 
+        Log.i(tag, "Leaving..")
         val jsonEmit = JSONObject()
         jsonEmit.put("chatid", id)
         socket.emit("join", jsonEmit)
@@ -88,6 +90,8 @@ class Chat : AppCompatActivity() {
             //addMessageView(msg, sentBy)
         }
 
+
+
         var url = "https://glennolsson.se/intnet/room/" + id
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
@@ -122,6 +126,22 @@ class Chat : AppCompatActivity() {
             socket.emit("message", jsonEmit)
             edtMessage.setText("")
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
+
+            val socket = SocketSingleton.getInstance(this.applicationContext).socket
+            val tag = SocketSingleton.getInstance(this.applicationContext).tag
+
+            Log.i(tag, "Leaving..")
+
+            socket.emit("leave")
+
+        }
+
+        return super.onKeyDown(keyCode, event)
     }
 
     private fun updateCount() {
