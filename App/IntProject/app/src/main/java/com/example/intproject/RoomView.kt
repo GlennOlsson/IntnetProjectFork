@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 
-class RoomView : LinearLayout, View.OnClickListener {
+class RoomView : LinearLayout {
     var id : String = ""
+
     constructor(context: Context, name: String, onlineCount: Int, roomId: String) : super(context) {
         inflate(context, R.layout.room_view, this)
 
@@ -34,9 +35,4 @@ class RoomView : LinearLayout, View.OnClickListener {
             attributes.recycle()
         }
     }
-
-    override fun onClick(v: View?) {
-        //
-    }
-
 }

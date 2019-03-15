@@ -16,15 +16,10 @@ import com.android.volley.toolbox.JsonObjectRequest
 import kotlinx.android.synthetic.main.room_view.view.*
 import org.json.JSONObject
 
-//import kotlinx.android.synthetic.main.message_view.view.*
 
 class MessageView : LinearLayout {
-
-    // Should add dynamic placing of image/message depending on who sent the message
-    // current user->msg to right, other user->msg to left
     constructor(context: Context, sentBy: String, message: String, sentDate: String) : super(context) {
         inflate(context, R.layout.message_view, this)
-
 
         val txtMessage: TextView = findViewById(R.id.txtMessage)
         val txtMessageInfo: TextView = findViewById(R.id.txtMessageInfo)
