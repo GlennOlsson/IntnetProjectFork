@@ -33,18 +33,14 @@ class Rooms : AppCompatActivity() {
 
         val req = JsonArrayRequest(Request.Method.GET, url, null,
             Response.Listener<JSONArray> { response ->
-                try {
-                    for (i in 0..response.length()-1) {
-                        val room = response.getJSONObject(i)
+                for (i in 0..response.length()-1) {
+                    val room = response.getJSONObject(i)
 
-                        val id = room.getString("id")
-                        val name = room.getString("name")
-                        val count = room.getInt("usercount")
+                    val id = room.getString("id")
+                    val name = room.getString("name")
+                    val count = room.getInt("usercount")
 
-                        linRooms.addView(createRoomView(name, count, id))
-                    }
-                } catch (e : Exception) {
-                    txtDebug.text = "OnCreate: " + e.toString()
+                    linRooms.addView(createRoomView(name, count, id))
                 }
             },
             Response.ErrorListener { error ->

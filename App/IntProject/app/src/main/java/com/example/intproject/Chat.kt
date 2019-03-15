@@ -23,14 +23,14 @@ import java.lang.Exception
 
 class Chat : AppCompatActivity() {
 
-    var userCache: HashMap<String, Bitmap> = HashMap<String, Bitmap>()
+    var userCache: HashMap<String, Bitmap> = HashMap()
     var count: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        var id : String = ""
+        var id = ""
 
         try {
             id = intent.getStringExtra("id")
@@ -39,18 +39,14 @@ class Chat : AppCompatActivity() {
 
             txtName.text = name
             updateCount()
-
         } catch (e: Exception) {
             txtName.text = "Err: " + e.toString()
         }
 
-        //val socketSingleton: SocketSingleton = SocketSingleton()
-        //val socketSingleton = SocketSingleton.instance
-        //val socket = socketSingleton.socket
         val socket = SocketSingleton.getInstance(this.applicationContext).socket
         val tag = SocketSingleton.getInstance(this.applicationContext).tag
 
-        Log.i(tag, "Leaving..")
+        Log.i(tag, "Joining..")
         val jsonEmit = JSONObject()
         jsonEmit.put("chatid", id)
         socket.emit("join", jsonEmit)
@@ -58,39 +54,23 @@ class Chat : AppCompatActivity() {
         socket.on("join") {
             count++
             runOnUiThread { updateCount() }
-            //updateCount()
         }
 
         socket.on("leave") {
             count--
             runOnUiThread { updateCount() }
-            //updateCount()
-        }
-
-        socket.on("notification") { res ->
-            Log.i(tag, "Det funkar kanske?? " + res[0].toString())
-            val resJson: JSONObject = res[0] as JSONObject
-            val title = "Pling Plong"
-            val content = resJson.getString("message")
-            //notificationSingleton.sendNotification(title, content)
         }
 
         socket.on("message") {res ->
             val resJson: JSONObject = res[0] as JSONObject
-            Log.i("Socket", resJson.toString())
             try {
                 val sentBy = resJson.getString("username")
                 val msg = resJson.getString("content")
                 runOnUiThread { addMessageView(msg, sentBy, "Alldeles nyss!") }
-                //addMessageView(msg, sentBy)
             } catch (e: Exception) {
-
+                Log.i(tag, e.toString())
             }
-
-            //addMessageView(msg, sentBy)
         }
-
-
 
         var url = Constants.urlHttp + "/room/" + id
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
@@ -111,7 +91,7 @@ class Chat : AppCompatActivity() {
                         addMessageView(msg, sentBy, sent)
                     }
                 } catch (e : Exception) {
-                    txtDebug.text = "OnCreate: " + e.toString()
+                    Log.i("Message", e.toString())
                 }
             },
             Response.ErrorListener { error ->
@@ -129,34 +109,28 @@ class Chat : AppCompatActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-
             val socket = SocketSingleton.getInstance(this.applicationContext).socket
             val tag = SocketSingleton.getInstance(this.applicationContext).tag
 
             Log.i(tag, "Leaving..")
-
             socket.emit("leave")
-
         }
-
         return super.onKeyDown(keyCode, event)
     }
 
     private fun updateCount() {
         txtCount.text = "Online: " + count
     }
+
     private fun addMessageView(msg: String, sentBy: String, sentDate: String) {
-        val msgView: MessageView = MessageView(this, sentBy, msg, sentDate)
+        val msgView = MessageView(this, sentBy, msg, sentDate)
         val queue = RequestSingleton.getInstance(this.applicationContext).requestQueue
 
         val u = userCache.get(sentBy)
         if (u != null) {
             msgView.setImage(u)
         } else {
-            // ugly
-
             val url = Constants.urlHttp + "/profile/" + sentBy
 
             val req = JsonObjectRequest(
@@ -169,7 +143,7 @@ class Chat : AppCompatActivity() {
                     userCache.put(sentBy, decodedByte)
                 },
                 Response.ErrorListener { error ->
-                    //txtDebug.text = error.message
+                    Log.i("Message", error.toString())
                 })
             queue.add(req)
         }
