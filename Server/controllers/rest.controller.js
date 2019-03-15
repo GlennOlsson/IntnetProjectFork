@@ -94,6 +94,7 @@ router.get("/profile/:username", (req, res) => {
                 date: comment.date
             }
         });
+        console.log("Return profile of ", name);
         res.json({
             created,
             picture,
@@ -186,6 +187,7 @@ router.post("/comment/:username", (req, res) => {
         }
 
         let notificationMessage = userfrom + " just left a commented on your profile: \”" + previewText + "\"";
+        console.log("Notification to ", commentOn, ", Message: ", notificationMessage);
         models.sendNotification(notificationMessage, commentOn);
 
     });
@@ -248,6 +250,7 @@ router.post("/friend/:username", (req, res) => {
             });
 
             let notificationMessage = userfrom + " just befriended you!";
+            console.log("New friendship from", userfrom, " to ", friend);
             models.sendNotification(notificationMessage, friend);
         });
     });
@@ -281,6 +284,7 @@ router.post("/bio", (req, res) => {
                     bio: bio
                 });
             }
+            console.log("Updated bio of ", username, " to ", bio);
             res.json({
                 success: true
             })
@@ -318,7 +322,7 @@ router.post("/newuser", (req, res) => {
                 return;
             }
             let time = ORMModels.getCurrentTime();
-            console.log("Time: ", time);
+            console.log("Creted new user: ", name);
             ORMModels.Profile.create({
                 user: name,
                 bio: "I am an uninteresting person without a bio",
