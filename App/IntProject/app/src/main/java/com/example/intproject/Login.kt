@@ -30,10 +30,6 @@ class Login : AppCompatActivity() {
         val socket = SocketSingleton.getInstance(this.applicationContext).socket
         val tag = SocketSingleton.getInstance(this.applicationContext).tag
 
-        val jsonEmit = JSONObject()
-        jsonEmit.put("username", "oscarekh")
-        socket.emit("init", jsonEmit)
-
         btnLogin.setOnClickListener {
 
             val url: String
@@ -42,29 +38,26 @@ class Login : AppCompatActivity() {
             if (register) {
                 url = Constants.urlHttp + "/newuser"
                 respList = Response.Listener<JSONObject> { response ->
-                    try {
-                        val success = response.getBoolean("success")
-                        val reason = response.optString("reason")
-                        register(success, reason)
-                    } catch (e : Exception) {
-                        txtDebug.text = "I Re.Lis: " + e.toString()
+                    val success = response.getBoolean("success")
+                    var reason = ""
+                    if (success) {
+                        reason = response.optString("reason")
                     }
+                    register(success, reason)
                 }
             } else {
                 url = Constants.urlHttp + "/login"
                 respList = Response.Listener<JSONObject> { response ->
-                    try {
-                        val success = response.getBoolean("success")
+                    val success = response.getBoolean("success")
+                    if (success) {
                         token = response.getString("token")
 
+                        Log.i(tag, "Initiating..")
                         val jsonEmit = JSONObject()
                         jsonEmit.put("username", username)
                         socket.emit("init", jsonEmit)
-
-                        login(success)
-                    } catch (e : Exception) {
-                        login(false)
                     }
+                    login(success)
                 }
             }
 
@@ -74,8 +67,6 @@ class Login : AppCompatActivity() {
             password = edtPassword.text.toString()
             reqBody.put("name", username)
             reqBody.put("password", password)
-
-
 
             val req = JsonObjectRequest(
                 Request.Method.POST, url, reqBody,
@@ -94,7 +85,6 @@ class Login : AppCompatActivity() {
 
     fun switchMode() {
         register = !register
-        //txtDebug.text = register.toString()
         val l = "LOGIN"
         val r = "REGISTER USER"
 
